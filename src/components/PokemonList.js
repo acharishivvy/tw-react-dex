@@ -3,7 +3,7 @@ import axios from "axios";
 import PokemonCard from "./PokemonCard";
 
 function PokemonList() {
-  const pokeAPI = "https://pokeapi.co/api/v2/pokemon?limit=12";
+  const pokeAPI = "https://pokeapi.co/api/v2/pokemon?limit=16";
   let [pokemonList, setPokemonList] = useState([]);
   let [next, setNext] = useState(null);
   let [prev, setPrev] = useState(null);
