@@ -31,7 +31,7 @@ export default function PokemonDetails(pokemon) {
 
   useLayoutEffect(() => {
     getDetails(pkmDetails);
-  }, []);
+  }, [pkmDetails]);
 
 
   // TODO: fix the conditional rendering and have it load onces all data is valid, otherwise it'll keep throwing the error
