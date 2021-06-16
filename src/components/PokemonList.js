@@ -39,9 +39,9 @@ function PokemonList() {
   return (
     <>
       <div className="">
-        <ul className="grid grid-cols-3 space-x-2 space-y-2">
+        <ul className="grid gap-2 grid-cols-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-8">
           {pokemonList.map((pkm) => (
-            <PokemonCard pokemon={pkm} />
+            <PokemonCard key={pkm.name} pokemon={pkm} />
           ))}
         </ul>
         <div className="inline-flex">
