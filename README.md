@@ -16,7 +16,7 @@ __Built with:__
 
 ## Installation and Usage
 
-Check out the live version on [Vercel]()
+Check out the live version on [Vercel](https://tw-react-dex.vercel.app/)
 
 > Note: Using Yarn Berry for this, not sure if that affects anything
 
