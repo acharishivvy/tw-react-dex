@@ -7,36 +7,47 @@ export default function PokemonDetails(pokemon) {
 
   const [pokemonSpecies, setPokemonSpecies] = useState([]);
   const [pokemonDetails, setPokemonDetails] = useState([]);
-
-  const getDetails = (url) => {
-    axios
-      .get(url)
-      .then((res) => {
-        let data = res.data;
-        setPokemonDetails(data);
-        getSpecies(data.species.url);
-      })
-      .catch((error) => console.error(error));
-  };
-
-  const getSpecies = (url) => {
-    axios
-      .get(url)
-      .then((res) => {
-        let data = res.data;
-        setPokemonSpecies(data);
-      })
-      .catch((error) => console.error(error));
-  };
+  const [pokemonEvolutions, setPokemonEvolutions] = useState([]);
 
   useLayoutEffect(() => {
-    getDetails(pkmDetails);
+    const getDetails = (url) => {
+      axios
+        .get(url)
+        .then((res) => {
+          let data = res.data;
+          setPokemonDetails(data);
+          getSpecies(data.species.url)
+        })
+        .catch((error) => console.error(error));
+    };
+
+    const getSpecies = (url) => {
+      axios
+        .get(url)
+        .then((res) => {
+          let data = res.data;
+          setPokemonSpecies(data);
+          getEvolutions(data.evolution_chain.url);
+        })
+        .catch((error) => console.error(error));
+    };
+
+    const getEvolutions = (url) => {
+      axios
+      .get(url)
+      .then((res) => {
+        let data = res.data;
+        setPokemonEvolutions(data);
+      })
+      .catch((error) => console.error(error));
+    }
+
+    getDetails(pkmDetails)
   }, [pkmDetails]);
 
 
-  // TODO: fix the conditional rendering and have it load onces all data is valid, otherwise it'll keep throwing the error
-  if (pokemonSpecies !== null ) {
-      <h1>Loading...</h1>
+  if (Object.values(pokemonEvolutions).length <= 0) { //Just to check if the object has data
+      return (<h1>Loading...</h1>)
   }
   return (
     <>
@@ -53,8 +64,8 @@ export default function PokemonDetails(pokemon) {
           <div className="mx-auto flex flex-wrap">
             <img src="" alt="" />
             <div className="">
-              <h1>{pokemonDetails.id}</h1>
-              <h2>{pokemonSpecies.capture_rate}</h2>
+              {/* Relevant Data to process later */}
+              {pokemonEvolutions.chain.species.name}
             </div>
           </div>
         </div>
