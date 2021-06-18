@@ -72,7 +72,7 @@ export default function PokemonDetails(pokemon) {
               {/* Height */}
               {/* Weight */}
               <section className="outline-black">
-                <h1>Pokedex Data</h1>
+                <h1>Pokemon Data</h1>
                 <p>{pokemonDetails.id}</p>
                 <p>{pokemonDetails.name}</p>
                 {/* TODO: Have an utility function handle this to reduce repeated code */}
@@ -113,6 +113,13 @@ export default function PokemonDetails(pokemon) {
                 <p>{pokemonDetails.base_experience}</p>
                 <p>{pokemonSpecies.base_friendship}</p>
                 <p>{pokemonSpecies.capture_rate}</p>
+                {Object.keys(pokemonDetails.stats).map(key => {
+                  if (pokemonDetails.stats[key].effort !== 0){
+                    return (<p key={key}> {pokemonDetails.stats[key].stat.name}: {pokemonDetails.stats[key].effort}</p>)
+                  } else {
+                    return null
+                  }
+                })}
                 {/* TODO: Function similar to types to look for which one is has a ev value */}
               </section>
 
@@ -124,6 +131,7 @@ export default function PokemonDetails(pokemon) {
               {/* special attack */}
               {/* special defence */}
               <section className="outline-black">
+                <h1>Stats</h1>
                 {Object.keys(pokemonDetails.stats).map(key => (
                 <p key={key}> {pokemonDetails.stats[key].stat.name}: {pokemonDetails.stats[key].base_stat}</p>
                 ))}
