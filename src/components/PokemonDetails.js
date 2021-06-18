@@ -120,7 +120,6 @@ export default function PokemonDetails(pokemon) {
                     return null
                   }
                 })}
-                {/* TODO: Function similar to types to look for which one is has a ev value */}
               </section>
 
               {/* Stats Data */}
@@ -148,9 +147,16 @@ export default function PokemonDetails(pokemon) {
                 <h1>Flavor Text</h1>
               </section>
 
-              {/* moves learnt */}
+              {/* moves learnt; tutor, egg, level-up, machine */}
               <section className="outline-black">
                 <h1>Moves</h1>
+                {Object.keys(pokemonDetails.stats).map(key => {
+                  if (pokemonDetails.moves[key].effort !== 0){
+                    return (<p key={key}> {pokemonDetails.stats[key].stat.name}: {pokemonDetails.stats[key].effort}</p>)
+                  } else {
+                    return null
+                  }
+                })}
               </section>
 
               {/* Sprites */}
@@ -164,6 +170,3 @@ export default function PokemonDetails(pokemon) {
     </>
   );
 }
-
-// ? Considering using displaying modal for specific data like move learnable by clicking on a button like moves learned via levelup
-// ? Dropdown version selector to pull certain flavor texts and location information based on games
