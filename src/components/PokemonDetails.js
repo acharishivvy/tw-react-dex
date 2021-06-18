@@ -64,8 +64,91 @@ export default function PokemonDetails(pokemon) {
           <div className="mx-auto flex flex-wrap">
             <img src="" alt="" />
             <div className="">
-              {/* Relevant Data to process later */}
-              {pokemonEvolutions.chain.species.name}
+              {/* General Data */}
+              {/* Name */}
+              {/* ID */}
+              {/* Types */}
+              {/* Abilities */}
+              {/* Height */}
+              {/* Weight */}
+              <section className="outline-black">
+                <h1>Pokedex Data</h1>
+                <p>{pokemonDetails.id}</p>
+                <p>{pokemonDetails.name}</p>
+                {/* TODO: Have an utility function handle this to reduce repeated code */}
+                {Object.keys(pokemonDetails.types).map(key => (
+                <p key={key}> {pokemonDetails.types[key].type.name}</p>
+                ))}
+                {/* TODO: check if ability is hidden */}
+                {Object.keys(pokemonDetails.abilities).map(key => (
+                <p key={key}> {pokemonDetails.abilities[key].ability.name}</p>
+                ))}
+                {/* Convert to conventional measurements */}
+                <p>{pokemonDetails.height}</p>
+                <p>{pokemonDetails.weight}</p>
+              </section>
+              
+              {/* Breeding Data */}
+              {/* Egg Groups */}
+              {/* Hatch Time/Steps */}
+              {/* Growth Speed */}
+              {/* Gender Ratio*/}
+              <section className="outline-black">
+                <h1>Breeding Data</h1>
+                {Object.keys(pokemonSpecies.egg_groups).map(key => (
+                <p key={key}> {pokemonSpecies.egg_groups[key].name}</p>
+                ))}
+                <p>{pokemonSpecies.hatch_counter}</p>
+                <p>{pokemonSpecies.growth_rate.name}</p>
+                <p>{pokemonSpecies.gender_ratio}</p>
+              </section>
+              
+              {/* Training Data */}
+              {/* Base exp */}
+              {/* base friendship */}
+              {/* Capture Rate */}
+              {/* EV Stat */}
+              <section className="outline-black">
+                <h1> Training Data </h1>
+                <p>{pokemonDetails.base_experience}</p>
+                <p>{pokemonSpecies.base_friendship}</p>
+                <p>{pokemonSpecies.capture_rate}</p>
+                {/* TODO: Function similar to types to look for which one is has a ev value */}
+              </section>
+
+              {/* Stats Data */}
+              {/* HP */}
+              {/* Atk */}
+              {/* Def */}
+              {/* speed */}
+              {/* special attack */}
+              {/* special defence */}
+              <section className="outline-black">
+                {Object.keys(pokemonDetails.stats).map(key => (
+                <p key={key}> {pokemonDetails.stats[key].stat.name}: {pokemonDetails.stats[key].base_stat}</p>
+                ))}
+              </section>
+
+              {/* Evolution Chain */}
+              {/* Check if it has evolution then iterate through the nested object */}
+              <section className="outline-black">
+                <h1>Evolution Chain</h1>
+              </section>
+
+              {/* Flavor Text per generation */}
+              <section className="outline-black">
+                <h1>Flavor Text</h1>
+              </section>
+
+              {/* moves learnt */}
+              <section className="outline-black">
+                <h1>Moves</h1>
+              </section>
+
+              {/* Sprites */}
+              <section className="outline-black">
+                <h1>Sprites</h1>
+              </section>
             </div>
           </div>
         </div>
