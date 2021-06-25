@@ -8,6 +8,29 @@ export default function PokemonDetails(pokemon) {
   const [pokemonSpecies, setPokemonSpecies] = useState([]);
   const [pokemonDetails, setPokemonDetails] = useState([]);
   const [pokemonEvolutions, setPokemonEvolutions] = useState([]);
+  let evoChain = [];
+
+  // TODO: Handle Eevee Exception otherwise it works really well
+  const traverseChain = (loc) => {
+    if (loc.hasOwnProperty('evolves_to')){
+      let numberOfEvolutions = loc.evolves_to.length;
+      for (let i = 0;i < numberOfEvolutions; i++) {
+      evoChain.push({
+          "species_name": loc.evolves_to[i].species.name,
+          "min_level": !loc.evolves_to[i]? 1 : loc.evolves_to[i].evolution_details[0].min_level,
+          "trigger_name": !loc.evolves_to[i]? null : loc.evolves_to[i].evolution_details[0].trigger.name,
+          "item": !loc.evolves_to[i]? null : loc.evolves_to[i].evolution_details[0].item
+      });
+      if (loc.evolves_to[i].hasOwnProperty('evolves_to')){
+        traverseChain(loc.evolves_to[i])
+      }
+      } 
+    }
+  }
+
+  const processEvolutions = (chainData) => {
+    traverseChain(chainData)
+  };
 
   useLayoutEffect(() => {
     const getDetails = (url) => {
@@ -16,7 +39,7 @@ export default function PokemonDetails(pokemon) {
         .then((res) => {
           let data = res.data;
           setPokemonDetails(data);
-          getSpecies(data.species.url)
+          getSpecies(data.species.url);
         })
         .catch((error) => console.error(error));
     };
@@ -34,21 +57,24 @@ export default function PokemonDetails(pokemon) {
 
     const getEvolutions = (url) => {
       axios
-      .get(url)
-      .then((res) => {
-        let data = res.data;
-        setPokemonEvolutions(data);
-      })
-      .catch((error) => console.error(error));
-    }
+        .get(url)
+        .then((res) => {
+          let data = res.data;
+          setPokemonEvolutions(data);
+        })
+        .catch((error) => console.error(error));
+    };
 
-    getDetails(pkmDetails)
+    getDetails(pkmDetails);
   }, [pkmDetails]);
 
+  if (Object.values(pokemonEvolutions).length <= 0) {
+    //Just to check if the object has data
+    return <h1>Loading...</h1>;
+  } else {
+    processEvolutions(pokemonEvolutions.chain);
+  } 
 
-  if (Object.values(pokemonEvolutions).length <= 0) { //Just to check if the object has data
-      return (<h1>Loading...</h1>)
-  }
   return (
     <>
       <section>
@@ -56,8 +82,11 @@ export default function PokemonDetails(pokemon) {
           <div className="relative inline-flex">
             <select className="border border-gray-300 rounded-full text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none">
               <option>Select Game Version</option>
-              {Object.keys(pokemonDetails.game_indices).map(key => (
-                <option key={key}> {pokemonDetails.game_indices[key].version.name}</option>
+              {Object.keys(pokemonDetails.game_indices).map((key) => (
+                <option key={key}>
+                  {" "}
+                  {pokemonDetails.game_indices[key].version.name}
+                </option>
               ))}
             </select>
           </div>
@@ -76,18 +105,18 @@ export default function PokemonDetails(pokemon) {
                 <p>{pokemonDetails.id}</p>
                 <p>{pokemonDetails.name}</p>
                 {/* TODO: Have an utility function handle this to reduce repeated code */}
-                {Object.keys(pokemonDetails.types).map(key => (
-                <p key={key}> {pokemonDetails.types[key].type.name}</p>
+                {Object.keys(pokemonDetails.types).map((key) => (
+                  <p key={key}> {pokemonDetails.types[key].type.name}</p>
                 ))}
                 {/* TODO: check if ability is hidden */}
-                {Object.keys(pokemonDetails.abilities).map(key => (
-                <p key={key}> {pokemonDetails.abilities[key].ability.name}</p>
+                {Object.keys(pokemonDetails.abilities).map((key) => (
+                  <p key={key}> {pokemonDetails.abilities[key].ability.name}</p>
                 ))}
                 {/* Convert to conventional measurements */}
                 <p>{pokemonDetails.height}</p>
                 <p>{pokemonDetails.weight}</p>
               </section>
-              
+
               {/* Breeding Data */}
               {/* Egg Groups */}
               {/* Hatch Time/Steps */}
@@ -95,14 +124,14 @@ export default function PokemonDetails(pokemon) {
               {/* Gender Ratio*/}
               <section className="outline-black">
                 <h1>Breeding Data</h1>
-                {Object.keys(pokemonSpecies.egg_groups).map(key => (
-                <p key={key}> {pokemonSpecies.egg_groups[key].name}</p>
+                {Object.keys(pokemonSpecies.egg_groups).map((key) => (
+                  <p key={key}> {pokemonSpecies.egg_groups[key].name}</p>
                 ))}
                 <p>{pokemonSpecies.hatch_counter}</p>
                 <p>{pokemonSpecies.growth_rate.name}</p>
                 <p>{pokemonSpecies.gender_ratio}</p>
               </section>
-              
+
               {/* Training Data */}
               {/* Base exp */}
               {/* base friendship */}
@@ -113,11 +142,17 @@ export default function PokemonDetails(pokemon) {
                 <p>{pokemonDetails.base_experience}</p>
                 <p>{pokemonSpecies.base_friendship}</p>
                 <p>{pokemonSpecies.capture_rate}</p>
-                {Object.keys(pokemonDetails.stats).map(key => {
-                  if (pokemonDetails.stats[key].effort !== 0){
-                    return (<p key={key}> {pokemonDetails.stats[key].stat.name}: {pokemonDetails.stats[key].effort}</p>)
+                {Object.keys(pokemonDetails.stats).map((key) => {
+                  if (pokemonDetails.stats[key].effort !== 0) {
+                    return (
+                      <p key={key}>
+                        {" "}
+                        {pokemonDetails.stats[key].stat.name}:{" "}
+                        {pokemonDetails.stats[key].effort}
+                      </p>
+                    );
                   } else {
-                    return null
+                    return null;
                   }
                 })}
               </section>
@@ -131,8 +166,12 @@ export default function PokemonDetails(pokemon) {
               {/* special defence */}
               <section className="outline-black">
                 <h1>Stats</h1>
-                {Object.keys(pokemonDetails.stats).map(key => (
-                <p key={key}> {pokemonDetails.stats[key].stat.name}: {pokemonDetails.stats[key].base_stat}</p>
+                {Object.keys(pokemonDetails.stats).map((key) => (
+                  <p key={key}>
+                    {" "}
+                    {pokemonDetails.stats[key].stat.name}:{" "}
+                    {pokemonDetails.stats[key].base_stat}
+                  </p>
                 ))}
               </section>
 
@@ -140,6 +179,7 @@ export default function PokemonDetails(pokemon) {
               {/* Check if it has evolution then iterate through the nested object */}
               <section className="outline-black">
                 <h1>Evolution Chain</h1>
+                <p>{evoChain.map((evo) => <li>Evolves to {evo.species_name} at level {evo.min_level} via {evo.trigger_name}</li>)}</p>
               </section>
 
               {/* Flavor Text per generation */}
@@ -150,13 +190,6 @@ export default function PokemonDetails(pokemon) {
               {/* moves learnt; tutor, egg, level-up, machine */}
               <section className="outline-black">
                 <h1>Moves</h1>
-                {Object.keys(pokemonDetails.stats).map(key => {
-                  if (pokemonDetails.moves[key].effort !== 0){
-                    return (<p key={key}> {pokemonDetails.stats[key].stat.name}: {pokemonDetails.stats[key].effort}</p>)
-                  } else {
-                    return null
-                  }
-                })}
               </section>
 
               {/* Sprites */}
