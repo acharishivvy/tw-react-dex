@@ -2,7 +2,6 @@ import React, { useState, useLayoutEffect } from "react";
 import axios from "axios";
 
 export default function PokemonDetails(pokemon) {
-  //pokemon details link
   const pkmDetails = `https://pokeapi.co/api/v2/pokemon/${pokemon.pokemon.name}`;
 
   const [pokemonSpecies, setPokemonSpecies] = useState([]);
@@ -10,26 +9,40 @@ export default function PokemonDetails(pokemon) {
   const [pokemonEvolutions, setPokemonEvolutions] = useState([]);
   let evoChain = [];
 
-  // TODO: Handle Eevee Exception otherwise it works really well
-  const traverseChain = (loc) => {
+  //Trying to handle as many conditionals as possible
+  const traverseEvoChain = (loc) => {
     if (loc.hasOwnProperty('evolves_to')){
       let numberOfEvolutions = loc.evolves_to.length;
-      for (let i = 0;i < numberOfEvolutions; i++) {
-      evoChain.push({
+      for (let i = 0; i < numberOfEvolutions; i++) {
+        if (numberOfEvolutions === undefined){
+          evoChain.push({
+            "trigger_name": "no-evolution"
+          })
+          console.log(evoChain)
+        }
+        // Only ever looks at the first evolution details so pokemon like with multiples ways to evolve (including multiple locations or methods aren't accounted for)
+        evoChain.push({
           "species_name": loc.evolves_to[i].species.name,
-          "min_level": !loc.evolves_to[i]? 1 : loc.evolves_to[i].evolution_details[0].min_level,
-          "trigger_name": !loc.evolves_to[i]? null : loc.evolves_to[i].evolution_details[0].trigger.name,
-          "item": !loc.evolves_to[i]? null : loc.evolves_to[i].evolution_details[0].item
-      });
-      if (loc.evolves_to[i].hasOwnProperty('evolves_to')){
-        traverseChain(loc.evolves_to[i])
-      }
+          "trigger_name": !loc.evolves_to[i] ? null : loc.evolves_to[i].evolution_details[0].trigger.name,
+          "min_level": !loc.evolves_to[i] ? 1 : loc.evolves_to[i].evolution_details[0].min_level,
+          "item": !loc.evolves_to[i] ? null : loc.evolves_to[i].evolution_details[0].item,
+          "trade_item": !loc.evolves_to[i] ? null : loc.evolves_to[i].evolution_details[0].held_item,
+          "happiness": !loc.evolves_to[i] ? null : loc.evolves_to[i].evolution_details[0].min_happiness,
+          "time_of_day": !loc.evolves_to[i] ? null : loc.evolves_to[i].evolution_details[0].time_of_day,
+          "known_move_type": !loc.evolves_to[i] ? null : loc.evolves_to[i].evolution_details[0].known_move_type,
+          "party_species": !loc.evolves_to[i] ? null : loc.evolves_to[i].evolution_details[0].party_species,
+          "party_type": !loc.evolves_to[i] ? null : loc.evolves_to[i].evolution_details[0].party_type,
+          "gender": !loc.evolves_to[i] ? null : loc.evolves_to[i].evolution_details[0].gender
+        });
+        if (loc.evolves_to[i].hasOwnProperty('evolves_to')){
+        traverseEvoChain(loc.evolves_to[i])
+        }
       } 
     }
   }
 
   const processEvolutions = (chainData) => {
-    traverseChain(chainData)
+    traverseEvoChain(chainData)
   };
 
   useLayoutEffect(() => {
@@ -79,7 +92,7 @@ export default function PokemonDetails(pokemon) {
     <>
       <section>
         <div className="container">
-          <div className="relative inline-flex">
+          <div className="relative p-8 bg-white w-6xl h-1/2 max-w-md m-auto flex-col flex">
             <select className="border border-gray-300 rounded-full text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none">
               <option>Select Game Version</option>
               {Object.keys(pokemonDetails.game_indices).map((key) => (
@@ -176,10 +189,35 @@ export default function PokemonDetails(pokemon) {
               </section>
 
               {/* Evolution Chain */}
-              {/* Check if it has evolution then iterate through the nested object */}
               <section className="outline-black">
                 <h1>Evolution Chain</h1>
-                <p>{evoChain.map((evo) => <li>Evolves to {evo.species_name} at level {evo.min_level} via {evo.trigger_name}</li>)}</p>
+                <p>{evoChain.map((evo) =>
+                  { 
+                    switch (evo.trigger_name){
+                      case "level-up":
+                        return <> 
+                          <li>{evo.species_name} via {evo.trigger_name}</li> 
+                            <li>{!evo.min_level ? null : `at ${evo.min_level}`}</li>
+                            <li>{!evo.happiness ? null : " with High Friendship"}</li>
+                            <li>{!evo.time_of_day ? null : `during the ${evo.time_of_day}`}</li>
+                            <li>{!evo.gender ? null : (evo.gender ? 1 : "female" )}</li>
+                            <li>{!evo.gender ? null : (evo.gender ? 2 : "male" )}</li>
+                        </> 
+                      case "trade":
+                        return <li>{evo.species_name} {evo.trigger_name} {evo.held_item.name}</li>
+                      case "use-item":
+                        return <li>{evo.species_name} {evo.trigger_name} {evo.item.name}</li>
+                      case "shed" : 
+                        return <li>This pokemon evolves via {evo.trigger_name}</li>
+                      case "other":
+                        return <li>This pokemon evolves via {evo.trigger_name}</li>
+                      case "no-evolution":
+                        return <li>This pokemon doesn't evolve!</li>
+                      default:
+                        return null
+                    } 
+                  } 
+                )}</p>
               </section>
 
               {/* Flavor Text per generation */}
