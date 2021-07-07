@@ -38,13 +38,15 @@ function PokemonList() {
 
   return (
     <>
-      <div className="">
-        <ul className="grid gap-2 grid-cols-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-8">
-          {pokemonList.map((pkm) => (
-            <PokemonCard key={pkm.name} pokemon={pkm} />
-          ))}
-        </ul>
-        <div className="inline-flex">
+      <div className="container my-12 mx-auto ">
+        <div className="flex flex-wrap flex-none w-full">
+          <ul className="">
+            {pokemonList.map((pkm) => (
+              <PokemonCard key={pkm.name} pokemon={pkm} />
+            ))}
+          </ul>
+        </div>
+        <div className="">
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             onClick={() => paginate(prev)}

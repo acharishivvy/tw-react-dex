@@ -1,5 +1,6 @@
 import React, { useState, useLayoutEffect } from "react";
 import axios from "axios";
+import Capitalize from "../functions/utility"
 
 export default function PokemonDetails(pokemon) {
   const pkmDetails = `https://pokeapi.co/api/v2/pokemon/${pokemon.pokemon.name}`;
@@ -90,15 +91,17 @@ export default function PokemonDetails(pokemon) {
 
   return (
     <>
-      <section>
-        <div className="container">
-          <div className="relative p-8 bg-white w-6xl h-1/2 max-w-md m-auto flex-col flex">
-            <select className="border border-gray-300 rounded-full text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none">
+      <section className="">
+        <div className="">
+          <p>TOP</p>
+          <div className="">
+            <p>TWO</p>
+            <select className="">
               <option>Select Game Version</option>
               {Object.keys(pokemonDetails.game_indices).map((key) => (
                 <option key={key}>
                   {" "}
-                  {pokemonDetails.game_indices[key].version.name}
+                  {Capitalize(pokemonDetails.game_indices[key].version.name)}
                 </option>
               ))}
             </select>
