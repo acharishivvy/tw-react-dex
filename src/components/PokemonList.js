@@ -38,9 +38,9 @@ function PokemonList() {
 
   return (
     <>
-      <div className="container my-12 mx-auto ">
-        <div className="flex flex-wrap flex-none w-full">
-          <ul className="">
+      <div className="w-max-screen-xl mx-auto px-4">
+        <div className="flex flex-wrap -mx-4 justify-center">
+          <ul className="grid grid-cols-4 px-10 gap-2">
             {pokemonList.map((pkm) => (
               <PokemonCard key={pkm.name} pokemon={pkm} />
             ))}
