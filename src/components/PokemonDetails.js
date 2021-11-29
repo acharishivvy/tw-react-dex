@@ -91,12 +91,11 @@ export default function PokemonDetails(pokemon) {
 
   return (
     <>
-      <section className="">
-        <div className="">
-          <p>TOP</p>
-          <div className="">
-            <p>TWO</p>
-            <select className="">
+    <div className="h-full  bg-gradient-to-r from-pink-300 to-indigo-300 overflow-auto">
+      <section className="grid grid-cols-12 gap-0">
+        <div className="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-8 xxl:col-span-8 px-6 py-6">
+          <div className="grid grid-cols-12 gap-6">
+            <select className="col-span-12 sm:col-span-12 md:col-span-6 lg:col-span-6 xxl:col-span-6">
               <option>Select Game Version</option>
               {Object.keys(pokemonDetails.game_indices).map((key) => (
                 <option key={key}>
@@ -106,7 +105,7 @@ export default function PokemonDetails(pokemon) {
               ))}
             </select>
           </div>
-          <div className="mx-auto flex flex-wrap">
+          <div className="">
             <img src="" alt="" />
             <div className="">
               {/* General Data */}
@@ -241,6 +240,7 @@ export default function PokemonDetails(pokemon) {
           </div>
         </div>
       </section>
+      </div>
     </>
   );
 }

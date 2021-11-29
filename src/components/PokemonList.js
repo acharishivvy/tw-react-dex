@@ -38,34 +38,35 @@ function PokemonList() {
 
   return (
     <>
-      <div className="w-max-screen-xl mx-auto px-4">
+      <div className="w-max-screen-xl mx-auto px-4 bg-gray-100">
+        {/* Add a search bar */}
+        <div className="flex flex-wrap -mx-4 justify-evenly">
+          <button
+            className="text-black font-semibold bg-white py-1 px-2 rounded-lg shadow-md hover:shadow-lg transition duration-500 transform-gpu hover:scale-110 hover:bg-green-400"
+            onClick={() => paginate(prev)}
+          >
+            Prev
+          </button>
+          <button
+            className="text-black font-semibold bg-white py-1 px-2 rounded-lg shadow-md hover:shadow-lg transition duration-500 transform-gpu hover:scale-110 hover:bg-green-400"
+            onClick={() => getPokemon(pokeAPI)}
+          >
+            Refetch
+          </button>
+          <button
+            className="text-black font-semibold bg-white py-1 px-2 rounded-lg shadow-md hover:shadow-lg transition duration-500 transform-gpu hover:scale-110 hover:bg-green-400"
+            onClick={() => paginate(next)}
+          >
+            Next
+          </button>
+        </div>
+
         <div className="flex flex-wrap -mx-4 justify-center">
           <ul className="grid grid-cols-4 px-10 gap-2">
             {pokemonList.map((pkm) => (
               <PokemonCard key={pkm.name} pokemon={pkm} />
             ))}
           </ul>
-        </div>
-        <div className="">
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onClick={() => paginate(prev)}
-          >
-            Prev
-          </button>
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onClick={() => paginate(next)}
-          >
-            Next
-          </button>
-
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onClick={() => getPokemon(pokeAPI)}
-          >
-            Refetch
-          </button>
         </div>
       </div>
     </>
