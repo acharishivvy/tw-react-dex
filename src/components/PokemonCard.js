@@ -30,10 +30,10 @@ function PokemonCard(pokemon) {
             {showModal ? (
         <>
           <div
-            className="fixed w-full inset-0 z-50 overflow-hidden flex justify-center items-center">
+            className="fixed w-full inset-0 z-50 overflow-hidden flex justify-center items-center  ">
             <div className="relative w-auto my-6 mx-auto max-w-3xl">
               {/*content*/}
-              <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+              <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none bg-gradient-to-r from-pink-300 to-indigo-300">
                 {/*header*/}
                 <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
                   <h3 className="text-3xl font-semibold">
@@ -49,7 +49,7 @@ function PokemonCard(pokemon) {
                   </button>
                 </div>
                 {/*body*/}
-                <div className="relative p-6 flex-auto">
+                <div className="h-full w-full bg-gray-50">
                   <PokemonDetails pokemon={pokemon.pokemon}/>
                 </div>
                 {/*footer*/}

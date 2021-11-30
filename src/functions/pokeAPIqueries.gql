@@ -1,0 +1,132 @@
+# Rough queries using pokeapi v1 graphql documentation
+
+query getPokemonBasicInfo {
+  pokemon: pokemon_v2_pokemon(where: {id: {_eq: 1}}) {
+    id
+    name
+    height
+    weight
+  }
+}
+
+query getPokemonTypes {
+  pokemon: pokemon_v2_pokemon(where: {id: {_eq: 1}}) {
+    pokemon_v2_pokemontypes {
+      pokemon_v2_type {
+        name
+      }
+    }
+  }
+}
+
+query getPokemonAbilities {
+  pokemon: pokemon_v2_pokemon(where: {id: {_eq: 1}}) {
+    pokemon_v2_pokemonabilities {
+      pokemon_v2_ability {
+        name
+      }
+      is_hidden
+    }
+  }
+}
+
+query getPokemonStats {
+  pokemon: pokemon_v2_pokemon(where: {id: {_eq: "pokemon id here"}}) {
+    pokemon_v2_pokemonstats {
+      effort
+      base_stat
+      pokemon_v2_stat {
+        name
+      }
+    }
+  }
+}
+
+query getPokemonBasicInfo2 {
+  pokemon: pokemon_v2_pokemon(where: {id: {_eq: 1}}) {
+    pokemon_v2_pokemonspecy {
+      base_happiness
+      capture_rate
+      evolution_chain_id
+      evolves_from_species_id
+      forms_switchable
+      gender_rate
+      generation_id
+      growth_rate_id
+      has_gender_differences
+      hatch_counter
+      is_baby
+      is_legendary
+      is_mythical
+      pokemon_v2_evolutionchain {
+        pokemon_v2_item {
+          name
+        }
+      }
+      pokemon_v2_growthrate {
+        name
+      }
+      pokemon_v2_pokemondexnumbers {
+        pokedex_number
+        pokemon_v2_pokedex {
+          name
+        }
+      }
+      pokemon_v2_pokemonegggroups {
+        pokemon_v2_egggroup {
+          name
+        }
+      }
+      pokemon_v2_pokemonspeciesflavortexts(where: {pokemon_v2_language: {name: {_eq: "en"}}}) {
+        flavor_text
+        pokemon_v2_version {
+          name
+        }
+      }
+    }
+  }
+}
+
+//If this returns null it doesn't evolve
+query getPokemonEvolutionInfo {
+  pokemon_v2_evolutionchain(where: {pokemon_v2_pokemonspecies: {id: {_eq: 145}}}) {
+    pokemon_v2_pokemonspecies {
+      pokemon_v2_pokemonevolutions {
+        pokemon_v2_pokemonspecy {
+          name
+        }
+        pokemon_v2_evolutiontrigger {
+          name
+        }
+        pokemon_v2_item {
+          name
+        }
+        min_level
+        min_happiness
+        needs_overworld_rain
+        min_affection
+        time_of_day
+        turn_upside_down
+      }
+    }
+  }
+}
+
+query getPokemonMoves {
+  pokemon_v2_pokemon {
+    id
+    name
+    pokemon_v2_pokemonmoves {
+      level
+      pokemon_v2_move {
+        name
+      }
+      pokemon_v2_movelearnmethod {
+        name
+      }
+      pokemon_v2_versiongroup {
+        name
+      }
+    }
+  }
+}

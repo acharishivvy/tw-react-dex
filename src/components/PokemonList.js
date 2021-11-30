@@ -26,7 +26,7 @@ function PokemonList() {
 
   const paginate = (paginationURL) => {
     if (paginationURL === null) {
-      alert("No More Pokemon Available");
+      alert("Oops... Can't find any more pokemon.");
     } else {
       getPokemon(paginationURL);
     }
