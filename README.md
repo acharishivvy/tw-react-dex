@@ -18,8 +18,6 @@ __Built with:__
 
 Check out the live version on [Vercel](https://tw-react-dex.vercel.app/)
 
-> Note: Using Yarn Berry for this, not sure if that affects anything
-
 ## License
 
 MIT © [SaiyanShivvy](https://github.com/SaiyanShivvy/)
