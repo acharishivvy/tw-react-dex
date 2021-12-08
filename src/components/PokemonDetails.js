@@ -41,7 +41,8 @@ export default function PokemonDetails(pokemon) {
   }, []);
 
   return basicDetails.length === 0 ? (
-    <h1 className="block text-gray-700 text-sm font-bold mb-2">Loading</h1>
+    <div className="bg-gradient-to-r from-pink-300 to-indigo-300"><h1 className="text-gray-700 text-xl font-bold">Loading</h1></div>
+    
   ) : (
     <>
       <div className="bg-gradient-to-r from-pink-300 to-indigo-300">
@@ -55,7 +56,7 @@ export default function PokemonDetails(pokemon) {
           {/* Height */}
           {/* Weight */}
           <div className="relative w-1/2 p-4 shadow-lg rounded-lg">
-            <h1 className="block text-gray-700 text-sm font-bold mb-2">
+            <h1 className="block text-gray-700 text-lg font-bold mb-2">
               Pokedex Data
             </h1>
             <p>ID: {basicDetails.id}</p>
