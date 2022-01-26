@@ -6,7 +6,6 @@ A Pokedex using PokeAPI, built with ReactJS and TailwindCSS.
 
 To learn ReactJS by building a simple pokedex that gets pokemon from PokeAPI, displays them to the user and allows the user to view more detailed information.
 
-Basically a toned down version of [PokemonDB](https://pokemondb.net/) or similar to [Pokemon.com](https://www.pokemon.com/)
 
 ## Technologies
 
