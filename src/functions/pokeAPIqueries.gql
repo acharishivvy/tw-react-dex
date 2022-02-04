@@ -1,13 +1,12 @@
 # Rough queries using pokeapi v1 graphql documentation
 
-query getPokemonBasicInfo {
-  pokemon: pokemon_v2_pokemon(where: {id: {_eq: 1}}) {
+query getGameVersions {
+  gameVersion: pokemon_v2_version {
     id
     name
-    height
-    weight
   }
 }
+
 
 query getPokemonTypes {
   pokemon: pokemon_v2_pokemon(where: {id: {_eq: 1}}) {
