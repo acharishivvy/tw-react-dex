@@ -24,15 +24,37 @@ export default function PokemonDetails(pokemon) {
           }
           pkm: pokemon_v2_pokemon(where: {name: {_eq: ${pokemon.pokemon.name} }}) {
               id
+              name
               height
               weight
-			  species: pokemon_v2_pokemonspecy {
+        abilities:  pokemon_v2_pokemonabilities {
+          is_hidden
+          ability: pokemon_v2_ability {
+            name
+          }
+        }
+        types: pokemon_v2_pokemontypes {
+          type: pokemon_v2_type {
+            name
+          }
+        }
+        stats: pokemon_v2_pokemonstats {
+          base_stat
+          effort
+          stat: pokemon_v2_stat {
+            name
+          }
+        }
+			species: pokemon_v2_pokemonspecy {
 				base_happiness
 				capture_rate
 				evolution_chain_id
 				evolves_from_species_id
 				forms_switchable
 				gender_rate
+        genus: pokemon_v2_pokemonspeciesnames(where: {pokemon_v2_language: {name: {_eq: "en"}}}) {
+          genus
+        }
 				generation_id
 				growth_rate_id
 				has_gender_differences
@@ -126,48 +148,66 @@ export default function PokemonDetails(pokemon) {
             ))}
           </select>
         </div>
+        {console.log(basicDetails)}
         <div className="flex flex-row flex-wrap">
           <div className="relative w-1/2 p-4 shadow-lg rounded-lg">
             <h1 className="block text-gray-700 text-lg font-bold mb-2">
               Rect 1
             </h1>
-            <p> ID: {basicDetails.id} </p>
+            <p>{basicDetails.id}</p>
+            <p>{basicDetails.name}</p>
+            <p>{basicDetails.species.dex[0].dexType.name} Dex</p>
+            <p>{basicDetails.species.dex[0].pokedex_number}</p>
           </div>
           <div className="relative w-1/2 p-4 shadow-lg rounded-lg">
             <h1 className="block text-gray-700 text-lg font-bold mb-2">
               Rect 2 - Species Info, Flavour text, Height, Weight
             </h1>
-            <p> ID: {basicDetails.id} </p>
+            <p>{basicDetails.species.genus[0].genus}</p>
+            {basicDetails.species.flavor.map((el) => (
+              <React.Fragment key={el.fromVersion.name}>
+                {el.fromVersion.name === version && <p>{el.flavor_text}</p>}
+              </React.Fragment>
+            ))}
+            <p>{basicDetails.height}</p>
+            <p>{basicDetails.weight}</p>
           </div>
           <div className="relative w-1/2 p-4 shadow-lg rounded-lg">
             <h1 className="block text-gray-700 text-lg font-bold mb-2">
-              Abilites
+              Abilites, Types
             </h1>
-            <p> ID: {basicDetails.id} </p>
+            {basicDetails.abilities.map((el) => (
+              <React.Fragment key={el.ability.name}>
+                <p>
+                  {el.ability.name} {el.is_hidden === true && "- Hidden"}
+                </p>
+              </React.Fragment>
+            ))}
+            {basicDetails.types.map((el) => (
+              <React.Fragment key={el.type.name}>
+                <p>{el.type.name}</p>
+              </React.Fragment>
+            ))}
           </div>
           <div className="relative w-1/2 p-4 shadow-lg rounded-lg">
             <h1 className="block text-gray-700 text-lg font-bold mb-2">
               Base Stats - Bar Graph Training - EV Yield, Catch Rate, Growth
             </h1>
-            <p> ID: {basicDetails.id} </p>
           </div>
           <div className="relative w-1/2 p-4 shadow-lg rounded-lg">
             <h1 className="block text-gray-700 text-lg font-bold mb-2">
               Breeding - Gender Ratio
             </h1>
-            <p> ID: {basicDetails.id} </p>
           </div>
           <div className="relative w-1/2 p-4 shadow-lg rounded-lg">
             <h1 className="block text-gray-700 text-lg font-bold mb-2">
               Evolution Chain - Alternate Forms
             </h1>
-            <p> ID: {basicDetails.id} </p>
           </div>
           <div className="relative w-1/2 p-4 shadow-lg rounded-lg">
             <h1 className="block text-gray-700 text-lg font-bold mb-2">
               Moves Learned - Tabbed Table
             </h1>
-            <p> ID: {basicDetails.id} </p>
           </div>
         </div>
       </div>
