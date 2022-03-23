@@ -50,14 +50,11 @@ export default function PokemonDetails(pokemon) {
 				capture_rate
 				evolution_chain_id
 				evolves_from_species_id
-				forms_switchable
 				gender_rate
         genus: pokemon_v2_pokemonspeciesnames(where: {pokemon_v2_language: {name: {_eq: "en"}}}) {
           genus
         }
 				generation_id
-				growth_rate_id
-				has_gender_differences
 				hatch_counter
 				is_baby
 				is_legendary
@@ -191,13 +188,25 @@ export default function PokemonDetails(pokemon) {
           </div>
           <div className="relative w-1/2 p-4 shadow-lg rounded-lg">
             <h1 className="block text-gray-700 text-lg font-bold mb-2">
-              Base Stats - Bar Graph Training - EV Yield, Catch Rate, Growth
+              Base Stats - Bar Graph? | Training - EV Yield, Catch Rate, Growth
             </h1>
+            {basicDetails.stats.map((el) => (
+              <React.Fragment key={el.stat.name}>
+                <p>
+                  {el.stat.name} {el.base_stat} |{" "}
+                  {el.effort != 0 && "EV Yield" + el.effort}
+                </p>
+              </React.Fragment>
+            ))}
+            {basicDetails.species.capture_rate}
+            {basicDetails.species.growth.name}
           </div>
           <div className="relative w-1/2 p-4 shadow-lg rounded-lg">
             <h1 className="block text-gray-700 text-lg font-bold mb-2">
               Breeding - Gender Ratio
             </h1>
+            {basicDetails.species.gender_rate}
+            {basicDetails.species.base_happiness}
           </div>
           <div className="relative w-1/2 p-4 shadow-lg rounded-lg">
             <h1 className="block text-gray-700 text-lg font-bold mb-2">
