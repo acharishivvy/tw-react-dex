@@ -190,11 +190,19 @@ export default function PokemonDetails(pokemon) {
             <h1 className="block text-gray-700 text-lg font-bold mb-2">
               Base Stats - Bar Graph? | Training - EV Yield, Catch Rate, Growth
             </h1>
+            {/* Probably need to run this outside of the render then display here saves duped code */}
             {basicDetails.stats.map((el) => (
               <React.Fragment key={el.stat.name}>
                 <p>
-                  {el.stat.name} {el.base_stat} |{" "}
-                  {el.effort != 0 && "EV Yield" + el.effort}
+                  {el.stat.name} {el.base_stat}{" "}
+                </p>
+              </React.Fragment>
+            ))}
+            {basicDetails.stats.map((el) => (
+              <React.Fragment key={el.stat.name}>
+                <p>
+                  {el.effort !== 0 &&
+                    "EV Yield: " + el.effort + " " + el.stat.name}
                 </p>
               </React.Fragment>
             ))}
@@ -205,7 +213,7 @@ export default function PokemonDetails(pokemon) {
             <h1 className="block text-gray-700 text-lg font-bold mb-2">
               Breeding - Gender Ratio
             </h1>
-            {basicDetails.species.gender_rate}
+            {basicDetails.species.gender_rate} |{" "}
             {basicDetails.species.base_happiness}
           </div>
           <div className="relative w-1/2 p-4 shadow-lg rounded-lg">
@@ -213,11 +221,11 @@ export default function PokemonDetails(pokemon) {
               Evolution Chain - Alternate Forms
             </h1>
           </div>
-          <div className="relative w-1/2 p-4 shadow-lg rounded-lg">
+          {/* <div className="relative w-1/2 p-4 shadow-lg rounded-lg">
             <h1 className="block text-gray-700 text-lg font-bold mb-2">
               Moves Learned - Tabbed Table
             </h1>
-          </div>
+          </div> */}
         </div>
       </div>
     </>
