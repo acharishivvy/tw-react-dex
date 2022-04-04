@@ -110,7 +110,7 @@ export default function PokemonDetails(pokemon) {
                     min_level
                     needs_overworld_rain
                     time_of_day
-                    turn_up_side_down
+                    turn_upside_down
                     heldItem: pokemonV2ItemByHeldItemId {
                       name
                     }
@@ -147,7 +147,6 @@ export default function PokemonDetails(pokemon) {
     axios
       .request(options)
       .then(function (response) {
-        console.log(response);
         setBasicDetails(response.data.data.pkm[0]);
         setGameVersions(response.data.data.gameVersion);
       })
@@ -270,15 +269,17 @@ export default function PokemonDetails(pokemon) {
               Evolution Chain
             </h1>
             {basicDetails.species.evolutionChain.evoSpecies.map((el, idx) => (
-              <React.Fragment key={idx}>
-                {el.evolution.length !== 0 && (
-                  <React.Fragment>
-                    <p>
-                      Evolves to: {el.evolution[0].evoName.name} using{" "}
-                      {el.evolution[0].trigger.name} at
-                      {el.evolution[0].min_level}
-                    </p>
-                  </React.Fragment>
+              <React.Fragment>
+                {el.evolution.length !== 0 &&
+                  (el.evolution[0].trigger.name === "level-up" ? (
+                    <>level-up</>
+                  ) : el.evolution[0].trigger.name === "use-item" ? (
+                    <>use-item</>
+                  ) : (
+                    <>Default</>
+                  ))}
+                {basicDetails.species.evolutionChain.evoSpecies.length <= 1 && (
+                  <>This Pokemon Doesn't Evolve</>
                 )}
               </React.Fragment>
             ))}

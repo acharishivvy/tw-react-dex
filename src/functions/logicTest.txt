@@ -1,0 +1,6 @@
+evolution chain: data.pkm[0].species.evoChain.evoSpecies[i].evolution
+
+map the chain
+    data.pkm[0].species.evoChain.evoSpecies.map((el) => (
+
+    ))
