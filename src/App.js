@@ -11,10 +11,10 @@ function App() {
             <h2 className="text-xl font-normal mt-4">
               Simple Pokedex made using ReactJS and TailwindCSS
             </h2>
+            <h3>This uses PokeAPI so it's prone to getting Rate-Limited!</h3>
           </div>
         </section>
       </header>
-      {/* Main Content */}
       <div>
         <PokemonList />
       </div>
