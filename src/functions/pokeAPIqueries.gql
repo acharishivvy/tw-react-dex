@@ -1,131 +1,107 @@
-# Rough queries using pokeapi v1 graphql documentation
-
-query getGameVersions {
-  gameVersion: pokemon_v2_version {
-    id
-    name
-  }
-}
-
-
-query getPokemonTypes {
-  pokemon: pokemon_v2_pokemon(where: {id: {_eq: 1}}) {
-    pokemon_v2_pokemontypes {
-      pokemon_v2_type {
-        name
-      }
-    }
-  }
-}
-
-query getPokemonAbilities {
-  pokemon: pokemon_v2_pokemon(where: {id: {_eq: 1}}) {
-    pokemon_v2_pokemonabilities {
-      pokemon_v2_ability {
-        name
-      }
-      is_hidden
-    }
-  }
-}
-
-query getPokemonStats {
-  pokemon: pokemon_v2_pokemon(where: {id: {_eq: "pokemon id here"}}) {
-    pokemon_v2_pokemonstats {
-      effort
-      base_stat
-      pokemon_v2_stat {
-        name
-      }
-    }
-  }
-}
-
-query getPokemonBasicInfo2 {
-  pokemon: pokemon_v2_pokemon(where: {id: {_eq: 1}}) {
-    pokemon_v2_pokemonspecy {
-      base_happiness
-      capture_rate
-      evolution_chain_id
-      evolves_from_species_id
-      forms_switchable
-      gender_rate
-      generation_id
-      growth_rate_id
-      has_gender_differences
-      hatch_counter
-      is_baby
-      is_legendary
-      is_mythical
-      pokemon_v2_evolutionchain {
-        pokemon_v2_item {
-          name
-        }
-      }
-      pokemon_v2_growthrate {
-        name
-      }
-      pokemon_v2_pokemondexnumbers {
-        pokedex_number
-        pokemon_v2_pokedex {
-          name
-        }
-      }
-      pokemon_v2_pokemonegggroups {
-        pokemon_v2_egggroup {
-          name
-        }
-      }
-      pokemon_v2_pokemonspeciesflavortexts(where: {pokemon_v2_language: {name: {_eq: "en"}}}) {
-        flavor_text
-        pokemon_v2_version {
-          name
-        }
-      }
-    }
-  }
-}
-
-//If this returns null it doesn't evolve
-query getPokemonEvolutionInfo {
-  pokemon_v2_evolutionchain(where: {pokemon_v2_pokemonspecies: {id: {_eq: 145}}}) {
-    pokemon_v2_pokemonspecies {
-      pokemon_v2_pokemonevolutions {
-        pokemon_v2_pokemonspecy {
-          name
-        }
-        pokemon_v2_evolutiontrigger {
-          name
-        }
-        pokemon_v2_item {
-          name
-        }
-        min_level
-        min_happiness
-        needs_overworld_rain
-        min_affection
-        time_of_day
-        turn_upside_down
-      }
-    }
-  }
-}
-
-query getPokemonMoves {
-  pokemon_v2_pokemon {
-    id
-    name
-    pokemon_v2_pokemonmoves {
-      level
-      pokemon_v2_move {
-        name
-      }
-      pokemon_v2_movelearnmethod {
-        name
-      }
-      pokemon_v2_versiongroup {
-        name
-      }
-    }
-  }
-}
+{
+          gameVersion: pokemon_v2_version {
+            id
+            name
+          }
+          pkm: pokemon_v2_pokemon(where: {name: {_eq: ${pokemon.pokemon.name} }}) {
+            name
+            id
+            forms: pokemon_v2_pokemonforms {
+              form_name
+              name
+              is_battle_only
+              is_mega
+              is_default
+            }
+            abilities: pokemon_v2_pokemonabilities {
+              is_hidden
+              ability: pokemon_v2_ability {
+                name
+              }
+            }
+            moves: pokemon_v2_pokemonmoves {
+              move_learn_method_id
+              level
+              order
+              version_group_id
+              move: pokemon_v2_move {
+                name
+                accuracy
+                power
+                pp
+              }
+              learnMethod: pokemon_v2_movelearnmethod {
+                name
+              }
+            }
+            stats: pokemon_v2_pokemonstats {
+              base_stat
+              effort
+              stat: pokemon_v2_stat {
+                name
+              }
+            }
+            types: pokemon_v2_pokemontypes {
+              slot
+              type: pokemon_v2_type {
+                name
+              }
+            }
+            species: pokemon_v2_pokemonspecy {
+              base_happiness
+              evolution_chain_id
+              evolves_from_species_id
+              hatch_counter
+              is_baby
+              is_mythical
+              is_legendary
+              order
+              eggGroup: pokemon_v2_pokemonegggroups {
+                group: pokemon_v2_egggroup {
+                  name
+                }
+              }
+              genus: pokemon_v2_pokemonspeciesnames {
+                genus
+              }
+              flavorTexts: pokemon_v2_pokemonspeciesflavortexts {
+                flavor_text
+                gameVersion: pokemon_v2_version {
+                  name
+                }
+              }
+              pokedex: pokemon_v2_pokemondexnumbers {
+                dexNo: pokemon_v2_pokedex {
+                  name
+                  id
+                }
+              }
+              growth: pokemon_v2_growthrate {
+                name
+              }
+              evolutions: pokemon_v2_pokemonevolutions {
+                min_level
+                min_happiness
+                min_affection
+                min_beauty
+                time_of_day
+                turn_upside_down
+                trigger: pokemon_v2_evolutiontrigger {
+                  name
+                }
+                gender: pokemon_v2_gender {
+                  name
+                }
+                item: pokemon_v2_item {
+                  name
+                }
+                location: pokemon_v2_location {
+                  name
+                }
+                evoName: pokemon_v2_pokemonspecy {
+                  name
+                }
+              }
+            }
+          }
+        } 

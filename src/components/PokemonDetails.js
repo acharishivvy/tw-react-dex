@@ -1,6 +1,7 @@
 import React, { useState, useLayoutEffect } from "react";
 import axios from "axios";
-import Capitalize from "../functions/utility";
+import { CalculateStatPercentage, Capitalize } from "../functions/utility";
+import ProgressBar from "./progressBar";
 
 export default function PokemonDetails(pokemon) {
   const [basicDetails, setBasicDetails] = useState([]);
@@ -23,69 +24,122 @@ export default function PokemonDetails(pokemon) {
             name
           }
           pkm: pokemon_v2_pokemon(where: {name: {_eq: ${pokemon.pokemon.name} }}) {
-              id
+            id
+            name
+            height
+            weight
+            forms: pokemon_v2_pokemonforms {
+              form_name
               name
-              height
-              weight
-        abilities:  pokemon_v2_pokemonabilities {
-          is_hidden
-          ability: pokemon_v2_ability {
-            name
-          }
-        }
-        types: pokemon_v2_pokemontypes {
-          type: pokemon_v2_type {
-            name
-          }
-        }
-        stats: pokemon_v2_pokemonstats {
-          base_stat
-          effort
-          stat: pokemon_v2_stat {
-            name
-          }
-        }
-			species: pokemon_v2_pokemonspecy {
-				base_happiness
-				capture_rate
-				evolution_chain_id
-				evolves_from_species_id
-				gender_rate
-        genus: pokemon_v2_pokemonspeciesnames(where: {pokemon_v2_language: {name: {_eq: "en"}}}) {
-          genus
-        }
-				generation_id
-				hatch_counter
-				is_baby
-				is_legendary
-				is_mythical
-				evo: pokemon_v2_evolutionchain {
-				  evoItem: pokemon_v2_item {
-					name
-				  }
-				}
-				growth: pokemon_v2_growthrate {
-				  name
-				}
-				dex: pokemon_v2_pokemondexnumbers {
-				  pokedex_number
-				  dexType: pokemon_v2_pokedex {
-					name
-				  }
-				}
-				egg: pokemon_v2_pokemonegggroups {
-				  group: pokemon_v2_egggroup {
-					name
-				  }
-				}
-				flavor: pokemon_v2_pokemonspeciesflavortexts(where: {pokemon_v2_language: {name: {_eq: "en"}}}) {
-				  flavor_text
-				  fromVersion: pokemon_v2_version {
-					name
-				  }
-				}
-			  }
-            } 
+              is_battle_only
+              is_mega
+              is_default
+            }
+            abilities: pokemon_v2_pokemonabilities {
+              is_hidden
+              ability: pokemon_v2_ability {
+                name
+              }
+            }
+            moves: pokemon_v2_pokemonmoves {
+              move_learn_method_id
+              level
+              order
+              version_group_id
+              move: pokemon_v2_move {
+                name
+                accuracy
+                power
+                pp
+              }
+              learnMethod: pokemon_v2_movelearnmethod {
+                name
+              }
+            }
+            stats: pokemon_v2_pokemonstats {
+              base_stat
+              effort
+              stat: pokemon_v2_stat {
+                name
+              }
+            }
+            types: pokemon_v2_pokemontypes {
+              slot
+              type: pokemon_v2_type {
+                name
+              }
+            }
+            species: pokemon_v2_pokemonspecy {
+              base_happiness
+              evolution_chain_id
+              evolves_from_species_id
+              hatch_counter
+              is_baby
+              is_mythical
+              is_legendary
+              order
+              eggGroup: pokemon_v2_pokemonegggroups {
+                group: pokemon_v2_egggroup {
+                  name
+                }
+              }
+              genus: pokemon_v2_pokemonspeciesnames {
+                genus
+              }
+              flavorTexts: pokemon_v2_pokemonspeciesflavortexts {
+                flavor_text
+                gameVersion: pokemon_v2_version {
+                  name
+                }
+              }
+              pokedex: pokemon_v2_pokemondexnumbers {
+                dexNo: pokemon_v2_pokedex {
+                  name
+                  id
+                }
+              }
+              growth: pokemon_v2_growthrate {
+                name
+              }
+              evolutionChain: pokemon_v2_evolutionchain {
+                evoSpecies: pokemon_v2_pokemonspecies {
+                  evolution: pokemon_v2_pokemonevolutions {
+                    min_affection
+                    min_beauty
+                    min_happiness
+                    min_level
+                    needs_overworld_rain
+                    time_of_day
+                    turn_up_side_down
+                    heldItem: pokemonV2ItemByHeldItemId {
+                      name
+                    }
+                    trigger: pokemon_v2_evolutiontrigger {
+                      name
+                    }
+                    gender: pokemon_v2_gender {
+                      name
+                    }
+                    item: pokemon_v2_item {
+                      name
+                    }
+                    location: pokemon_v2_location {
+                      name
+                    }
+                    move: pokemon_v2_move {
+                      name
+                    }
+                    type: pokemon_v2_type {
+                      name
+                    }
+                    evoName: pokemon_v2_pokemonspecy {
+                      name
+                    }
+                  }
+                }
+              }
+            }
+          } 
       }`,
       },
     };
@@ -93,6 +147,7 @@ export default function PokemonDetails(pokemon) {
     axios
       .request(options)
       .then(function (response) {
+        console.log(response);
         setBasicDetails(response.data.data.pkm[0]);
         setGameVersions(response.data.data.gameVersion);
       })
@@ -148,31 +203,24 @@ export default function PokemonDetails(pokemon) {
         {console.log(basicDetails)}
         <div className="flex flex-row flex-wrap">
           <div className="relative w-1/2 p-4 shadow-lg rounded-lg">
-            <h1 className="block text-gray-700 text-lg font-bold mb-2">
-              Rect 1
-            </h1>
-            <p>{basicDetails.id}</p>
+            <h1 className="block text-gray-700 text-lg font-bold mb-2">#</h1>
             <p>{basicDetails.name}</p>
-            <p>{basicDetails.species.dex[0].dexType.name} Dex</p>
-            <p>{basicDetails.species.dex[0].pokedex_number}</p>
+            <p>{basicDetails.species.pokedex[0].dexNo.name} Dex</p>
+            <p>{basicDetails.species.pokedex[0].dexNo.id}</p>
           </div>
           <div className="relative w-1/2 p-4 shadow-lg rounded-lg">
-            <h1 className="block text-gray-700 text-lg font-bold mb-2">
-              Rect 2 - Species Info, Flavour text, Height, Weight
-            </h1>
-            <p>{basicDetails.species.genus[0].genus}</p>
-            {basicDetails.species.flavor.map((el) => (
-              <React.Fragment key={el.fromVersion.name}>
-                {el.fromVersion.name === version && <p>{el.flavor_text}</p>}
+            <h1 className="block text-gray-700 text-lg font-bold mb-2">A</h1>
+            <p>{basicDetails.species.genus[8].genus}</p>
+            {basicDetails.species.flavorTexts.map((el, idx) => (
+              <React.Fragment key={idx}>
+                {el.gameVersion.name === version && <p>{el.flavor_text}</p>}
               </React.Fragment>
             ))}
             <p>{basicDetails.height}</p>
             <p>{basicDetails.weight}</p>
           </div>
           <div className="relative w-1/2 p-4 shadow-lg rounded-lg">
-            <h1 className="block text-gray-700 text-lg font-bold mb-2">
-              Abilites, Types
-            </h1>
+            <h1 className="block text-gray-700 text-lg font-bold mb-2">B</h1>
             {basicDetails.abilities.map((el) => (
               <React.Fragment key={el.ability.name}>
                 <p>
@@ -187,22 +235,25 @@ export default function PokemonDetails(pokemon) {
             ))}
           </div>
           <div className="relative w-1/2 p-4 shadow-lg rounded-lg">
-            <h1 className="block text-gray-700 text-lg font-bold mb-2">
-              Base Stats - Bar Graph? | Training - EV Yield, Catch Rate, Growth
-            </h1>
+            <h1 className="block text-gray-700 text-lg font-bold mb-2">C</h1>
             {/* Probably need to run this outside of the render then display here saves duped code */}
             {basicDetails.stats.map((el) => (
               <React.Fragment key={el.stat.name}>
-                <p>
-                  {el.stat.name} {el.base_stat}{" "}
-                </p>
+                <span>
+                  {Capitalize(el.stat.name)} : {el.base_stat}
+                </span>
+                <ProgressBar
+                  bgcolor="Lime"
+                  progress={CalculateStatPercentage(el.base_stat)}
+                  height={12}
+                />
               </React.Fragment>
             ))}
             {basicDetails.stats.map((el) => (
               <React.Fragment key={el.stat.name}>
                 <p>
                   {el.effort !== 0 &&
-                    "EV Yield: " + el.effort + " " + el.stat.name}
+                    "EV Yield: " + el.effort + " " + Capitalize(el.stat.name)}
                 </p>
               </React.Fragment>
             ))}
@@ -211,15 +262,26 @@ export default function PokemonDetails(pokemon) {
           </div>
           <div className="relative w-1/2 p-4 shadow-lg rounded-lg">
             <h1 className="block text-gray-700 text-lg font-bold mb-2">
-              Breeding - Gender Ratio
+              Breeding
             </h1>
-            {basicDetails.species.gender_rate} |{" "}
-            {basicDetails.species.base_happiness}
           </div>
           <div className="relative w-1/2 p-4 shadow-lg rounded-lg">
             <h1 className="block text-gray-700 text-lg font-bold mb-2">
-              Evolution Chain - Alternate Forms
+              Evolution Chain
             </h1>
+            {basicDetails.species.evolutionChain.evoSpecies.map((el, idx) => (
+              <React.Fragment key={idx}>
+                {el.evolution.length !== 0 && (
+                  <React.Fragment>
+                    <p>
+                      Evolves to: {el.evolution[0].evoName.name} using{" "}
+                      {el.evolution[0].trigger.name} at
+                      {el.evolution[0].min_level}
+                    </p>
+                  </React.Fragment>
+                )}
+              </React.Fragment>
+            ))}
           </div>
           {/* <div className="relative w-1/2 p-4 shadow-lg rounded-lg">
             <h1 className="block text-gray-700 text-lg font-bold mb-2">
