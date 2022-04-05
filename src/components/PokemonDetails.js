@@ -271,13 +271,37 @@ export default function PokemonDetails(pokemon) {
             {basicDetails.species.evolutionChain.evoSpecies.map((el, idx) => (
               <React.Fragment>
                 {el.evolution.length !== 0 &&
-                  (el.evolution[0].trigger.name === "level-up" ? (
-                    <>level-up</>
-                  ) : el.evolution[0].trigger.name === "use-item" ? (
-                    <>use-item</>
-                  ) : (
-                    <>Default</>
-                  ))}
+                  el.evolution.map((ev, i) =>
+                    ev.trigger.name === "level-up" ? (
+                      <>level-up</>
+                    ) : ev.trigger.name === "use-item" ? (
+                      <>use-item</>
+                    ) : ev.trigger.name === "use-item" ? (
+                      <>Trade</>
+                    ) : ev.trigger.name === "level-up" &&
+                      ev.min_happiness !== null ? (
+                      <>Happiness</>
+                    ) : ev.trigger.name === "level-up" && ev.type !== null ? (
+                      <>Level-up with Move Type</>
+                    ) : ev.trigger.name === "level-up" && ev.move !== null ? (
+                      <>Level-up when knowing move</>
+                    ) : ev.trigger.name === "trade" && ev.heldItem !== null ? (
+                      <>Trade w/ Item</>
+                    ) : ev.trigger.name === "level-up" &&
+                      ev.location !== null ? (
+                      <>Level-up @ location</>
+                    ) : ev.trigger.name === "level-up" &&
+                      ev.min_happiness !== null &&
+                      ev.type !== null ? (
+                      <>Level-up + Happiness + knowing move type</>
+                    ) : ev.trigger.name === "level-up" &&
+                      ev.min_happiness !== null &&
+                      ev.time_of_day !== null ? (
+                      <>Level up + Happiness + during time of day</>
+                    ) : (
+                      <>Default</>
+                    )
+                  )}
                 {basicDetails.species.evolutionChain.evoSpecies.length <= 1 && (
                   <>This Pokemon Doesn't Evolve</>
                 )}
