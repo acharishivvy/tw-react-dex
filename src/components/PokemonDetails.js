@@ -271,33 +271,72 @@ export default function PokemonDetails(pokemon) {
             {basicDetails.species.evolutionChain.evoSpecies.map((el, idx) => (
               <React.Fragment>
                 {el.evolution.length !== 0 &&
-                  el.evolution.map((ev, i) =>
+                  el.evolution.map((ev) =>
                     ev.trigger.name === "level-up" ? (
-                      <>level-up</>
+                      <>
+                        Evolves to {Capitalize(ev.evoName.name)} at Level{" "}
+                        {ev.min_level} <br />
+                      </>
                     ) : ev.trigger.name === "use-item" ? (
-                      <>use-item</>
-                    ) : ev.trigger.name === "use-item" ? (
-                      <>Trade</>
+                      <>
+                        Evolves to {Capitalize(ev.evoName.name)} using{" "}
+                        {ev.item.name} <br />
+                      </>
+                    ) : ev.trigger.name === "trade" ? (
+                      <>
+                        Evolves to {Capitalize(ev.evoName.name)} via Trade{" "}
+                        <br />
+                      </>
                     ) : ev.trigger.name === "level-up" &&
                       ev.min_happiness !== null ? (
-                      <>Happiness</>
+                      <>
+                        Evolves to {Capitalize(ev.evoName.name)} upon Level up
+                        with {ev.min_happiness} Happiness
+                        <br />
+                      </>
                     ) : ev.trigger.name === "level-up" && ev.type !== null ? (
-                      <>Level-up with Move Type</>
+                      <>
+                        Evolves to {Capitalize(ev.evoName.name)} while know a{" "}
+                        {ev.type.name} type move
+                        <br />
+                      </>
                     ) : ev.trigger.name === "level-up" && ev.move !== null ? (
-                      <>Level-up when knowing move</>
+                      <>
+                        Evolves to {Capitalize(ev.evoName.name)} upon Level up
+                        with {ev.move.name} learnt
+                        <br />
+                      </>
                     ) : ev.trigger.name === "trade" && ev.heldItem !== null ? (
-                      <>Trade w/ Item</>
+                      <>
+                        Evolves to {Capitalize(ev.evoName.name)} via Trade
+                        holding {ev.heldItem.name}
+                        <br />
+                      </>
                     ) : ev.trigger.name === "level-up" &&
                       ev.location !== null ? (
-                      <>Level-up @ location</>
+                      <>
+                        Evolves to {Capitalize(ev.evoName.name)} upon Level up
+                        at {ev.location.name}
+                        <br />
+                      </>
                     ) : ev.trigger.name === "level-up" &&
                       ev.min_happiness !== null &&
                       ev.type !== null ? (
-                      <>Level-up + Happiness + knowing move type</>
+                      <>
+                        Evolves to {Capitalize(ev.evoName.name)} upon Level up
+                        with {ev.min_happiness} Happiness and knowing a{" "}
+                        {ev.type.name} move.
+                        <br />
+                      </>
                     ) : ev.trigger.name === "level-up" &&
                       ev.min_happiness !== null &&
                       ev.time_of_day !== null ? (
-                      <>Level up + Happiness + during time of day</>
+                      <>
+                        Evolves to {Capitalize(ev.evoName.name)} upon Level up
+                        with {ev.min_happiness} Happiness during the{" "}
+                        {ev.time_of_day}
+                        . <br />
+                      </>
                     ) : (
                       <>Default</>
                     )
