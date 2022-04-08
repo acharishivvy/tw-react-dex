@@ -4,7 +4,7 @@ const ProgressBar = ({ bgcolor, progress, height }) => {
   const Parentdiv = {
     height: height,
     width: "100%",
-    backgroundColor: "whitesmoke",
+    backgroundColor: "magnolia",
     borderRadius: 40,
   };
 

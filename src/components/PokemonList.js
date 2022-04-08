@@ -38,27 +38,28 @@ function PokemonList() {
 
 	return (
     <>
-      <div className="w-max-screen-xl mx-auto px-4 bg-gray-100">
+      <div className="w-max-screen-xl mx-auto px-4 bg-languid-lavender">
         <div className="flex flex-wrap -mx-4 justify-evenly">
           <button
-            className="text-black font-semibold bg-white py-1 px-2 rounded-lg shadow-md hover:shadow-lg transition duration-500 transform-gpu hover:scale-110 hover:bg-green-400"
+            className="text-black font-semibold bg-magnolia py-1 px-2 rounded-lg shadow-md hover:shadow-lg transition duration-500 transform-gpu hover:scale-110 hover:bg-illumination-emerald hover:text-white"
             onClick={() => paginate(prev)}
           >
             Prev
           </button>
           <button
-            className="text-black font-semibold bg-white py-1 px-2 rounded-lg shadow-md hover:shadow-lg transition duration-500 transform-gpu hover:scale-110 hover:bg-green-400"
+            className="text-black font-semibold bg-magnolia py-1 px-2 rounded-lg shadow-md hover:shadow-lg transition duration-500 transform-gpu hover:scale-110 hover:bg-illumination-emerald hover:text-white"
             onClick={() => getPokemon(pokeAPI)}
           >
             Refetch
           </button>
           <button
-            className="text-black font-semibold bg-white py-1 px-2 rounded-lg shadow-md hover:shadow-lg transition duration-500 transform-gpu hover:scale-110 hover:bg-green-400"
+            className="text-black font-semibold bg-white py-1 px-2 rounded-lg shadow-md hover:shadow-lg transition duration-500 transform-gpu hover:scale-110 hover:bg-illumination-emerald hover:text-white"
             onClick={() => paginate(next)}
           >
             Next
           </button>
         </div>
+        <br />
         <div className="flex flex-wrap -mx-4 justify-center">
           <ul className="grid grid-cols-4 px-10 gap-2">
             {pokemonList.map((pkm) => (

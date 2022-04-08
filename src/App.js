@@ -4,8 +4,8 @@ import React from "react";
 function App() {
   return (
     <>
-      <header className="bg-gray-800">
-        <section className="flex bg-gray-100 py-24 justify-center">
+      <header className="bg-languid-lavender">
+        <section className="flex py-24 justify-center">
           <div className="p-12 text-center max-w-2xl">
             <h1 className="md:text-3xl text-3xl font-bold"> React-Dex</h1>
             <h2 className="text-xl font-normal mt-4">

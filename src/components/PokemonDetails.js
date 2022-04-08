@@ -1,6 +1,6 @@
 import React, { useState, useLayoutEffect } from "react";
 import axios from "axios";
-import { CalculateStatPercentage, Capitalize } from "../functions/utility";
+import { CalculateStatPercentage } from "../functions/utility";
 import ProgressBar from "./progressBar";
 
 export default function PokemonDetails(pokemon) {
@@ -91,6 +91,9 @@ export default function PokemonDetails(pokemon) {
                 gameVersion: pokemon_v2_version {
                   name
                 }
+                language: pokemon_v2_language {
+                  name
+                }
               }
               pokedex: pokemon_v2_pokemondexnumbers {
                 dexNo: pokemon_v2_pokedex {
@@ -165,61 +168,39 @@ export default function PokemonDetails(pokemon) {
   }, []);
 
   return basicDetails.length === 0 && gameVersions.length === 0 ? (
-    <div className="bg-gradient-to-r from-pink-300 to-indigo-300">
-      <h1 className="text-gray-700 text-xl font-bold"> Loading </h1>
+    <div className="">
+      <h1 className=""> Loading </h1>
     </div>
   ) : (
-    <>
-      <div className="flex flex-col bg-gradient-to-r from-pink-300 to-indigo-300">
-        <div className="flex justify-center mb-3 xl:w-96">
+    <React.Fragment>
+      <div className="flex flex-col">
+        <div className="flex justify-center mb-3">
+          Game Version:
           <select
             value={version}
             onChange={handleChange}
-            className="form-select appearance-none
-      block
-      w-full
-      px-3
-      py-1.5
-      text-base
-      font-normal
-      text-gray-700
-      bg-white bg-clip-padding bg-no-repeat
-      border border-solid border-gray-300
-      rounded
-      transition
-      ease-in-out
-      m-0
-      focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-            aria-label="Default select example"
+            className="bg-magnolia border border-gray-300 rounded-full text-center hover:border-gray-400 focus:outline-none appearance-none"
           >
             {gameVersions.map((version, id) => (
-              <option key={id} value={version.name}>
-                {Capitalize(version.name)}
+              <option key={id} value={version.name} className="capitalize">
+                {version.name}
               </option>
             ))}
           </select>
         </div>
         {console.log(basicDetails)}
-        <div className="flex flex-row flex-wrap">
-          <div className="relative w-1/2 p-4 shadow-lg rounded-lg">
-            <h1 className="block text-gray-700 text-lg font-bold mb-2">#</h1>
-            <p>{basicDetails.name}</p>
-            <p>{basicDetails.species.pokedex[0].dexNo.name} Dex</p>
-            <p>{basicDetails.species.pokedex[0].dexNo.id}</p>
+        <div className="flex flex-row flex-wrap justify-items-center">
+          <div className="shadow-lg rounded-lg w-1/3 flex-grow">
+            <h1 className="">Boi</h1>
+            <p className="capitalize">
+              {basicDetails.species.pokedex[0].dexNo.name} Dex
+            </p>
+            <p className="capitalize">
+              {basicDetails.species.pokedex[0].dexNo.id}
+            </p>
           </div>
-          <div className="relative w-1/2 p-4 shadow-lg rounded-lg">
-            <h1 className="block text-gray-700 text-lg font-bold mb-2">A</h1>
-            <p>{basicDetails.species.genus[8].genus}</p>
-            {basicDetails.species.flavorTexts.map((el, idx) => (
-              <React.Fragment key={idx}>
-                {el.gameVersion.name === version && <p>{el.flavor_text}</p>}
-              </React.Fragment>
-            ))}
-            <p>{basicDetails.height}</p>
-            <p>{basicDetails.weight}</p>
-          </div>
-          <div className="relative w-1/2 p-4 shadow-lg rounded-lg">
-            <h1 className="block text-gray-700 text-lg font-bold mb-2">B</h1>
+          <div className="shadow-lg rounded-lg w-1/3 flex-grow">
+            <h1 className="">B</h1>
             {basicDetails.abilities.map((el) => (
               <React.Fragment key={el.ability.name}>
                 <p>
@@ -229,19 +210,39 @@ export default function PokemonDetails(pokemon) {
             ))}
             {basicDetails.types.map((el) => (
               <React.Fragment key={el.type.name}>
-                <p>{el.type.name}</p>
+                <button
+                  className={`bg-${el.type.name} shadow-lg rounded-lg px-4 mx-2 capitalize`}
+                >
+                  {el.type.name}
+                </button>
               </React.Fragment>
             ))}
           </div>
-          <div className="relative w-1/2 p-4 shadow-lg rounded-lg">
-            <h1 className="block text-gray-700 text-lg font-bold mb-2">C</h1>
+          <div className="shadow-lg rounded-lg w-1/3 flex-grow">
+            <h1>Breeding</h1>
+          </div>
+          <div className="shadow-lg rounded-lg w-full">
+            <h1 className="">A</h1>
+            <p>{basicDetails.species.genus[8].genus}</p>
+            {basicDetails.species.flavorTexts.map((el, idx) => (
+              <React.Fragment key={idx}>
+                {el.gameVersion.name === version &&
+                  el.language.name === "en" && <p>{el.flavor_text}</p>}
+              </React.Fragment>
+            ))}
+            <p>{basicDetails.height}</p>
+            <p>{basicDetails.weight}</p>
+          </div>
+          <div className="shadow-lg rounded-lg w-1/2">
+            <h1 className="">C</h1>
             {/* Probably need to run this outside of the render then display here saves duped code */}
             {basicDetails.stats.map((el) => (
               <React.Fragment key={el.stat.name}>
-                <span>
-                  {Capitalize(el.stat.name)} : {el.base_stat}
+                <span className="capitalize">
+                  {el.stat.name} : {el.base_stat}
                 </span>
                 <ProgressBar
+                  className="p-4"
                   bgcolor="Lime"
                   progress={CalculateStatPercentage(el.base_stat)}
                   height={12}
@@ -250,103 +251,95 @@ export default function PokemonDetails(pokemon) {
             ))}
             {basicDetails.stats.map((el) => (
               <React.Fragment key={el.stat.name}>
-                <p>
+                <p className="capitalize">
                   {el.effort !== 0 &&
-                    "EV Yield: " + el.effort + " " + Capitalize(el.stat.name)}
+                    "EV Yield: " + el.effort + " " + el.stat.name}
                 </p>
               </React.Fragment>
             ))}
             {basicDetails.species.capture_rate}
             {basicDetails.species.growth.name}
           </div>
-          <div className="relative w-1/2 p-4 shadow-lg rounded-lg">
-            <h1 className="block text-gray-700 text-lg font-bold mb-2">
-              Breeding
-            </h1>
-          </div>
-          <div className="relative w-1/2 p-4 shadow-lg rounded-lg ">
-            <h1 className="block text-gray-700 text-lg font-bold mb-2">
-              Evolution Chain
-            </h1>
+          <div className="shadow-lg rounded-lg w-1/2 overflow-y-auto">
+            <h1 className="">Evolution Chain</h1>
             {basicDetails.species.evolutionChain.evoSpecies.map((el, idx) => (
-              <React.Fragment className="h-60 overflow-auto">
+              <React.Fragment>
                 {el.evolution.length !== 0 &&
                   el.evolution.map((ev) => {
                     if (ev.trigger.name === "level-up") {
                       return (
-                        <>
-                          Evolves to {Capitalize(ev.evoName.name)} at Level{" "}
-                          {ev.min_level} <br />
-                        </>
+                        <React.Fragment>
+                          Evolves to {ev.evoName.name} at Level {ev.min_level}{" "}
+                          <br />
+                        </React.Fragment>
                       );
                     } else if (ev.trigger.name === "use-item") {
                       return (
-                        <>
-                          Evolves to {Capitalize(ev.evoName.name)} using{" "}
-                          {ev.item.name} <br />
-                        </>
+                        <React.Fragment>
+                          Evolves to {ev.evoName.name} using {ev.item.name}{" "}
+                          <br />
+                        </React.Fragment>
                       );
                     } else if (ev.trigger.name === "trade") {
                       return (
-                        <>
-                          Evolves to {Capitalize(ev.evoName.name)} via Trade{" "}
-                          <br />
-                        </>
+                        <React.Fragment>
+                          Evolves to {ev.evoName.name} via Trade <br />
+                        </React.Fragment>
                       );
                     } else if (
                       ev.trigger.name === "trade" &&
                       ev.heldItem !== null
                     ) {
                       return (
-                        <>
-                          Evolves to {Capitalize(ev.evoName.name)} via Trade
-                          holding {ev.heldItem.name}
+                        <React.Fragment>
+                          Evolves to {ev.evoName.name} via Trade holding{" "}
+                          {ev.heldItem.name}
                           <br />
-                        </>
+                        </React.Fragment>
                       );
                     } else if (
                       ev.trigger.name === "level-up" &&
                       ev.min_happiness !== null
                     ) {
                       return (
-                        <>
-                          Evolves to {Capitalize(ev.evoName.name)} upon Level up
-                          with {ev.min_happiness} Happiness
+                        <React.Fragment>
+                          Evolves to {ev.evoName.name} upon Level up with{" "}
+                          {ev.min_happiness} Happiness
                           <br />
-                        </>
+                        </React.Fragment>
                       );
                     } else if (
                       ev.trigger.name === "level-up" &&
                       ev.type !== null
                     ) {
                       return (
-                        <>
-                          Evolves to {Capitalize(ev.evoName.name)} while know a{" "}
+                        <React.Fragment>
+                          Evolves to {ev.evoName.name} while know a{" "}
                           {ev.type.name} type move
                           <br />
-                        </>
+                        </React.Fragment>
                       );
                     } else if (
                       ev.trigger.name === "level-up" &&
                       ev.move !== null
                     ) {
                       return (
-                        <>
-                          Evolves to {Capitalize(ev.evoName.name)} upon Level up
-                          with {ev.move.name} learnt
+                        <React.Fragment>
+                          Evolves to {ev.evoName.name} upon Level up with{" "}
+                          {ev.move.name} learnt
                           <br />
-                        </>
+                        </React.Fragment>
                       );
                     } else if (
                       ev.trigger.name === "level-up" &&
                       ev.location !== null
                     ) {
                       return (
-                        <>
-                          Evolves to {Capitalize(ev.evoName.name)} upon Level up
-                          at {ev.location.name}
+                        <React.Fragment>
+                          Evolves to {ev.evoName.name} upon Level up at{" "}
+                          {ev.location.name}
                           <br />
-                        </>
+                        </React.Fragment>
                       );
                     } else if (
                       ev.trigger.name === "level-up" &&
@@ -354,12 +347,12 @@ export default function PokemonDetails(pokemon) {
                       ev.type !== null
                     ) {
                       return (
-                        <>
-                          Evolves to {Capitalize(ev.evoName.name)} upon Level up
-                          with {ev.min_happiness} Happiness and knowing a{" "}
+                        <React.Fragment>
+                          Evolves to {ev.evoName.name} upon Level up with{" "}
+                          {ev.min_happiness} Happiness and knowing a{" "}
                           {ev.type.name} move.
                           <br />
-                        </>
+                        </React.Fragment>
                       );
                     } else if (
                       ev.trigger.name === "level-up" &&
@@ -367,30 +360,30 @@ export default function PokemonDetails(pokemon) {
                       ev.time_of_day !== null
                     ) {
                       return (
-                        <>
-                          Evolves to {Capitalize(ev.evoName.name)} upon Level up
-                          with {ev.min_happiness} Happiness during the{" "}
+                        <React.Fragment>
+                          Evolves to {ev.evoName.name} upon Level up with{" "}
+                          {ev.min_happiness} Happiness during the{" "}
                           {ev.time_of_day}
                           . <br />
-                        </>
+                        </React.Fragment>
                       );
                     } else {
-                      return <>Default</>;
+                      return <React.Fragment>Default</React.Fragment>;
                     }
                   })}
                 {basicDetails.species.evolutionChain.evoSpecies.length <= 1 && (
-                  <>This Pokemon Doesn't Evolve</>
+                  <React.Fragment>This Pokemon Doesn't Evolve</React.Fragment>
                 )}
               </React.Fragment>
             ))}
           </div>
-          {/* <div className="relative w-1/2 p-4 shadow-lg rounded-lg">
-            <h1 className="block text-gray-700 text-lg font-bold mb-2">
+          {/* <div className="">
+            <h1 className="">
               Moves Learned - Tabbed Table
             </h1>
           </div> */}
         </div>
       </div>
-    </>
+    </React.Fragment>
   );
 }
