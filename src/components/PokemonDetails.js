@@ -264,83 +264,120 @@ export default function PokemonDetails(pokemon) {
               Breeding
             </h1>
           </div>
-          <div className="relative w-1/2 p-4 shadow-lg rounded-lg">
+          <div className="relative w-1/2 p-4 shadow-lg rounded-lg ">
             <h1 className="block text-gray-700 text-lg font-bold mb-2">
               Evolution Chain
             </h1>
             {basicDetails.species.evolutionChain.evoSpecies.map((el, idx) => (
-              <React.Fragment>
+              <React.Fragment className="h-60 overflow-auto">
                 {el.evolution.length !== 0 &&
-                  el.evolution.map((ev) =>
-                    ev.trigger.name === "level-up" ? (
-                      <>
-                        Evolves to {Capitalize(ev.evoName.name)} at Level{" "}
-                        {ev.min_level} <br />
-                      </>
-                    ) : ev.trigger.name === "use-item" ? (
-                      <>
-                        Evolves to {Capitalize(ev.evoName.name)} using{" "}
-                        {ev.item.name} <br />
-                      </>
-                    ) : ev.trigger.name === "trade" ? (
-                      <>
-                        Evolves to {Capitalize(ev.evoName.name)} via Trade{" "}
-                        <br />
-                      </>
-                    ) : ev.trigger.name === "level-up" &&
-                      ev.min_happiness !== null ? (
-                      <>
-                        Evolves to {Capitalize(ev.evoName.name)} upon Level up
-                        with {ev.min_happiness} Happiness
-                        <br />
-                      </>
-                    ) : ev.trigger.name === "level-up" && ev.type !== null ? (
-                      <>
-                        Evolves to {Capitalize(ev.evoName.name)} while know a{" "}
-                        {ev.type.name} type move
-                        <br />
-                      </>
-                    ) : ev.trigger.name === "level-up" && ev.move !== null ? (
-                      <>
-                        Evolves to {Capitalize(ev.evoName.name)} upon Level up
-                        with {ev.move.name} learnt
-                        <br />
-                      </>
-                    ) : ev.trigger.name === "trade" && ev.heldItem !== null ? (
-                      <>
-                        Evolves to {Capitalize(ev.evoName.name)} via Trade
-                        holding {ev.heldItem.name}
-                        <br />
-                      </>
-                    ) : ev.trigger.name === "level-up" &&
-                      ev.location !== null ? (
-                      <>
-                        Evolves to {Capitalize(ev.evoName.name)} upon Level up
-                        at {ev.location.name}
-                        <br />
-                      </>
-                    ) : ev.trigger.name === "level-up" &&
+                  el.evolution.map((ev) => {
+                    if (ev.trigger.name === "level-up") {
+                      return (
+                        <>
+                          Evolves to {Capitalize(ev.evoName.name)} at Level{" "}
+                          {ev.min_level} <br />
+                        </>
+                      );
+                    } else if (ev.trigger.name === "use-item") {
+                      return (
+                        <>
+                          Evolves to {Capitalize(ev.evoName.name)} using{" "}
+                          {ev.item.name} <br />
+                        </>
+                      );
+                    } else if (ev.trigger.name === "trade") {
+                      return (
+                        <>
+                          Evolves to {Capitalize(ev.evoName.name)} via Trade{" "}
+                          <br />
+                        </>
+                      );
+                    } else if (
+                      ev.trigger.name === "trade" &&
+                      ev.heldItem !== null
+                    ) {
+                      return (
+                        <>
+                          Evolves to {Capitalize(ev.evoName.name)} via Trade
+                          holding {ev.heldItem.name}
+                          <br />
+                        </>
+                      );
+                    } else if (
+                      ev.trigger.name === "level-up" &&
+                      ev.min_happiness !== null
+                    ) {
+                      return (
+                        <>
+                          Evolves to {Capitalize(ev.evoName.name)} upon Level up
+                          with {ev.min_happiness} Happiness
+                          <br />
+                        </>
+                      );
+                    } else if (
+                      ev.trigger.name === "level-up" &&
+                      ev.type !== null
+                    ) {
+                      return (
+                        <>
+                          Evolves to {Capitalize(ev.evoName.name)} while know a{" "}
+                          {ev.type.name} type move
+                          <br />
+                        </>
+                      );
+                    } else if (
+                      ev.trigger.name === "level-up" &&
+                      ev.move !== null
+                    ) {
+                      return (
+                        <>
+                          Evolves to {Capitalize(ev.evoName.name)} upon Level up
+                          with {ev.move.name} learnt
+                          <br />
+                        </>
+                      );
+                    } else if (
+                      ev.trigger.name === "level-up" &&
+                      ev.location !== null
+                    ) {
+                      return (
+                        <>
+                          Evolves to {Capitalize(ev.evoName.name)} upon Level up
+                          at {ev.location.name}
+                          <br />
+                        </>
+                      );
+                    } else if (
+                      ev.trigger.name === "level-up" &&
                       ev.min_happiness !== null &&
-                      ev.type !== null ? (
-                      <>
-                        Evolves to {Capitalize(ev.evoName.name)} upon Level up
-                        with {ev.min_happiness} Happiness and knowing a{" "}
-                        {ev.type.name} move.
-                        <br />
-                      </>
-                    ) : ev.trigger.name === "level-up" &&
+                      ev.type !== null
+                    ) {
+                      return (
+                        <>
+                          Evolves to {Capitalize(ev.evoName.name)} upon Level up
+                          with {ev.min_happiness} Happiness and knowing a{" "}
+                          {ev.type.name} move.
+                          <br />
+                        </>
+                      );
+                    } else if (
+                      ev.trigger.name === "level-up" &&
                       ev.min_happiness !== null &&
-                      ev.time_of_day !== null ? (
-                      <>
-                        Evolves to {Capitalize(ev.evoName.name)} upon Level up
-                        with {ev.min_happiness} Happiness during the{" "}
-                        {ev.time_of_day}
-                        . <br />
-                      </>
-                    ) : (
-                      <>Default</>
-                    )
-                  )}
+                      ev.time_of_day !== null
+                    ) {
+                      return (
+                        <>
+                          Evolves to {Capitalize(ev.evoName.name)} upon Level up
+                          with {ev.min_happiness} Happiness during the{" "}
+                          {ev.time_of_day}
+                          . <br />
+                        </>
+                      );
+                    } else {
+                      return <>Default</>;
+                    }
+                  })}
                 {basicDetails.species.evolutionChain.evoSpecies.length <= 1 && (
                   <>This Pokemon Doesn't Evolve</>
                 )}
