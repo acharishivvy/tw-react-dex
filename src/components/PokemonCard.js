@@ -33,14 +33,14 @@ function PokemonCard(pokemon) {
                 <div className="relative w-auto my-6 mx-auto max-w-3xl">
                   <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-magnolia">
                     <div className="flex items-start justify-between p-5 ">
-                      <h3 className="text-3xl font-semibold leading-snug">
+                      <h3 className="text-3xl font-semibold leading-snug capitalize">
                         {pokemon.pokemon.name}
                       </h3>
                     </div>
                     <div className="relative flex-auto p-6">
                       <div
                         className="overflow-y-auto"
-                        style={{ height: "680px" }}
+                        style={{ height: "640px" }}
                       >
                         <PokemonDetails pokemon={pokemon.pokemon} />
                       </div>

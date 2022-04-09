@@ -1,6 +1,6 @@
 import React, { useState, useLayoutEffect } from "react";
 import axios from "axios";
-import { CalculateStatPercentage } from "../functions/utility";
+import { CalculateStatPercentage, ConvertUnits } from "../functions/utility";
 import ProgressBar from "./progressBar";
 
 export default function PokemonDetails(pokemon) {
@@ -42,17 +42,16 @@ export default function PokemonDetails(pokemon) {
               }
             }
             moves: pokemon_v2_pokemonmoves {
-              move_learn_method_id
               level
-              order
-              version_group_id
               move: pokemon_v2_move {
                 name
                 accuracy
                 power
-                pp
               }
               learnMethod: pokemon_v2_movelearnmethod {
+                name
+              }
+              gameVersion: pokemon_v2_versiongroup {
                 name
               }
             }
@@ -98,7 +97,6 @@ export default function PokemonDetails(pokemon) {
               pokedex: pokemon_v2_pokemondexnumbers {
                 dexNo: pokemon_v2_pokedex {
                   name
-                  id
                 }
               }
               growth: pokemon_v2_growthrate {
@@ -170,16 +168,35 @@ export default function PokemonDetails(pokemon) {
   return basicDetails.length === 0 && gameVersions.length === 0 ? (
     <div className="">
       <h1 className=""> Loading </h1>
+      {/* To force tailwind to make the colours available  */}
+      <span
+        className="bg-normal bg-fire bg-water
+        bg-electric
+        bg-grass
+        bg-ice
+        bg-fighting
+        bg-poison
+        bg-ground
+        bg-flying
+        bg-psychic
+        bg-bug
+        bg-rock
+        bg-ghost
+        bg-dragon
+        bg-dark
+        bg-steel
+        bg-fairy"
+      ></span>
     </div>
   ) : (
     <React.Fragment>
-      <div className="flex flex-col">
+      <div className="flex flex-col gap-y-4">
         <div className="flex justify-center mb-3">
           Game Version:
           <select
             value={version}
             onChange={handleChange}
-            className="bg-magnolia border border-gray-300 rounded-full text-center hover:border-gray-400 focus:outline-none appearance-none"
+            className="bg-magnolia border border-gray-300 rounded-full text-center hover:border-gray-400 focus:outline-none appearance-none capitalize"
           >
             {gameVersions.map((version, id) => (
               <option key={id} value={version.name} className="capitalize">
@@ -191,25 +208,18 @@ export default function PokemonDetails(pokemon) {
         {console.log(basicDetails)}
         <div className="flex flex-row flex-wrap justify-items-center">
           <div className="shadow-lg rounded-lg w-1/3 flex-grow">
-            <h1 className="">Boi</h1>
             <p className="capitalize">
-              {basicDetails.species.pokedex[0].dexNo.name} Dex
+              {basicDetails.species.pokedex[0].dexNo.name} Dex No. #
+              {basicDetails.id}
             </p>
-            <p className="capitalize">
-              {basicDetails.species.pokedex[0].dexNo.id}
-            </p>
+            <p>Species: {basicDetails.species.genus[8].genus}</p>
+            <p>Height: {ConvertUnits(basicDetails.height)}m</p>
+            <p>Weight: {ConvertUnits(basicDetails.weight)}kg</p>
           </div>
           <div className="shadow-lg rounded-lg w-1/3 flex-grow">
-            <h1 className="">B</h1>
-            {basicDetails.abilities.map((el) => (
-              <React.Fragment key={el.ability.name}>
-                <p>
-                  {el.ability.name} {el.is_hidden === true && "- Hidden"}
-                </p>
-              </React.Fragment>
-            ))}
             {basicDetails.types.map((el) => (
               <React.Fragment key={el.type.name}>
+                {/* Doing it this way is not recommended or supported */}
                 <button
                   className={`bg-${el.type.name} shadow-lg rounded-lg px-4 mx-2 capitalize`}
                 >
@@ -217,24 +227,39 @@ export default function PokemonDetails(pokemon) {
                 </button>
               </React.Fragment>
             ))}
+            {basicDetails.abilities.map((el) => (
+              <React.Fragment key={el.ability.name}>
+                <p className="capitalize">
+                  {el.ability.name} {el.is_hidden === true && <sub>Hidden</sub>}
+                </p>
+              </React.Fragment>
+            ))}
           </div>
           <div className="shadow-lg rounded-lg w-1/3 flex-grow">
-            <h1>Breeding</h1>
+            <span className="capitalize">
+              {" "}
+              Egg Groups:{" "}
+              {basicDetails.species.eggGroup.map((el, idx) => (
+                <React.Fragment>
+                  <em className="capitalize">{el.group.name} </em>
+                </React.Fragment>
+              ))}
+            </span>
           </div>
           <div className="shadow-lg rounded-lg w-full">
-            <h1 className="">A</h1>
-            <p>{basicDetails.species.genus[8].genus}</p>
             {basicDetails.species.flavorTexts.map((el, idx) => (
               <React.Fragment key={idx}>
                 {el.gameVersion.name === version &&
-                  el.language.name === "en" && <p>{el.flavor_text}</p>}
+                el.language.name === "en" ? (
+                  <p>{el.flavor_text}</p>
+                ) : (
+                  <></>
+                )}
               </React.Fragment>
             ))}
-            <p>{basicDetails.height}</p>
-            <p>{basicDetails.weight}</p>
           </div>
           <div className="shadow-lg rounded-lg w-1/2">
-            <h1 className="">C</h1>
+            <h1 className="">Base Stats</h1>
             {/* Probably need to run this outside of the render then display here saves duped code */}
             {basicDetails.stats.map((el) => (
               <React.Fragment key={el.stat.name}>
@@ -257,114 +282,159 @@ export default function PokemonDetails(pokemon) {
                 </p>
               </React.Fragment>
             ))}
-            {basicDetails.species.capture_rate}
-            {basicDetails.species.growth.name}
+            <p className="capitalize">
+              Growth Rate: {basicDetails.species.growth.name}
+            </p>
           </div>
           <div className="shadow-lg rounded-lg w-1/2 overflow-y-auto">
-            <h1 className="">Evolution Chain</h1>
+            <h1 className=" text-xl font-bold">Evolutions</h1>
             {basicDetails.species.evolutionChain.evoSpecies.map((el, idx) => (
               <React.Fragment>
                 {el.evolution.length !== 0 &&
                   el.evolution.map((ev) => {
                     if (ev.trigger.name === "level-up") {
-                      return (
-                        <React.Fragment>
-                          Evolves to {ev.evoName.name} at Level {ev.min_level}{" "}
-                          <br />
-                        </React.Fragment>
-                      );
+                      if (ev.min_happiness !== null) {
+                        if (ev.type !== null) {
+                          return (
+                            <React.Fragment>
+                              Evolves to{" "}
+                              <strong className="capitalize">
+                                {ev.evoName.name}
+                              </strong>{" "}
+                              upon Level up with {ev.min_happiness} Happiness
+                              and knowing a{" "}
+                              <strong className="capitalize">
+                                {ev.type.name}
+                              </strong>{" "}
+                              move.
+                              <br />
+                            </React.Fragment>
+                          );
+                        } else if (ev.time_of_day !== "") {
+                          return (
+                            <React.Fragment>
+                              Evolves to{" "}
+                              <strong className="capitalize">
+                                {ev.evoName.name}
+                              </strong>{" "}
+                              upon Level up with {ev.min_happiness} Happiness
+                              during the {ev.time_of_day}
+                              . <br />
+                            </React.Fragment>
+                          );
+                        } else {
+                          return (
+                            <React.Fragment>
+                              Evolves to{" "}
+                              <strong className="capitalize">
+                                {ev.evoName.name}
+                              </strong>{" "}
+                              upon Level up with {ev.min_happiness} Happiness
+                              <br />
+                            </React.Fragment>
+                          );
+                        }
+                      } else if (ev.location !== null) {
+                        return (
+                          <React.Fragment>
+                            Evolves to{" "}
+                            <strong className="capitalize">
+                              {ev.evoName.name}
+                            </strong>{" "}
+                            upon Level up at{" "}
+                            <strong className="capitalize">
+                              {ev.location.name}
+                            </strong>
+                            <br />
+                          </React.Fragment>
+                        );
+                      } else if (ev.move !== null) {
+                        return (
+                          <React.Fragment>
+                            Evolves to{" "}
+                            <strong className="capitalize">
+                              {ev.evoName.name}
+                            </strong>{" "}
+                            upon Level up with{" "}
+                            <strong className="capitalize"></strong>
+                            {ev.move.name} learnt
+                            <br />
+                          </React.Fragment>
+                        );
+                      } else if (ev.type !== null) {
+                        return (
+                          <React.Fragment>
+                            Evolves to{" "}
+                            <strong className="capitalize">
+                              {ev.evoName.name}
+                            </strong>{" "}
+                            while know a{" "}
+                            <strong className="capitalize">
+                              {ev.type.name}
+                            </strong>{" "}
+                            type move
+                            <br />
+                          </React.Fragment>
+                        );
+                      } else {
+                        return (
+                          <React.Fragment>
+                            Evolves to{" "}
+                            <strong className="capitalize">
+                              <strong className="capitalize">
+                                {ev.evoName.name}
+                              </strong>
+                            </strong>{" "}
+                            at Level {ev.min_level} <br />
+                          </React.Fragment>
+                        );
+                      }
                     } else if (ev.trigger.name === "use-item") {
                       return (
                         <React.Fragment>
-                          Evolves to {ev.evoName.name} using {ev.item.name}{" "}
+                          Evolves to{" "}
+                          <strong className="capitalize">
+                            {ev.evoName.name}
+                          </strong>{" "}
+                          using{" "}
+                          <strong className="capitalize">{ev.item.name}</strong>
                           <br />
                         </React.Fragment>
                       );
                     } else if (ev.trigger.name === "trade") {
+                      if (ev.heldItem !== null) {
+                        return (
+                          <React.Fragment>
+                            Evolves to{" "}
+                            <strong className="capitalize">
+                              {ev.evoName.name}
+                            </strong>{" "}
+                            via Trade holding{" "}
+                            <strong className="capitalize">
+                              {ev.heldItem.name}
+                            </strong>
+                            <br />
+                          </React.Fragment>
+                        );
+                      } else {
+                        return (
+                          <React.Fragment>
+                            Evolves to{" "}
+                            <strong className="capitalize">
+                              {ev.evoName.name}
+                            </strong>{" "}
+                            via Trade <br />
+                          </React.Fragment>
+                        );
+                      }
+                    } else if (ev.trigger.name === "three-critical-hits") {
                       return (
                         <React.Fragment>
-                          Evolves to {ev.evoName.name} via Trade <br />
-                        </React.Fragment>
-                      );
-                    } else if (
-                      ev.trigger.name === "trade" &&
-                      ev.heldItem !== null
-                    ) {
-                      return (
-                        <React.Fragment>
-                          Evolves to {ev.evoName.name} via Trade holding{" "}
-                          {ev.heldItem.name}
-                          <br />
-                        </React.Fragment>
-                      );
-                    } else if (
-                      ev.trigger.name === "level-up" &&
-                      ev.min_happiness !== null
-                    ) {
-                      return (
-                        <React.Fragment>
-                          Evolves to {ev.evoName.name} upon Level up with{" "}
-                          {ev.min_happiness} Happiness
-                          <br />
-                        </React.Fragment>
-                      );
-                    } else if (
-                      ev.trigger.name === "level-up" &&
-                      ev.type !== null
-                    ) {
-                      return (
-                        <React.Fragment>
-                          Evolves to {ev.evoName.name} while know a{" "}
-                          {ev.type.name} type move
-                          <br />
-                        </React.Fragment>
-                      );
-                    } else if (
-                      ev.trigger.name === "level-up" &&
-                      ev.move !== null
-                    ) {
-                      return (
-                        <React.Fragment>
-                          Evolves to {ev.evoName.name} upon Level up with{" "}
-                          {ev.move.name} learnt
-                          <br />
-                        </React.Fragment>
-                      );
-                    } else if (
-                      ev.trigger.name === "level-up" &&
-                      ev.location !== null
-                    ) {
-                      return (
-                        <React.Fragment>
-                          Evolves to {ev.evoName.name} upon Level up at{" "}
-                          {ev.location.name}
-                          <br />
-                        </React.Fragment>
-                      );
-                    } else if (
-                      ev.trigger.name === "level-up" &&
-                      ev.min_happiness !== null &&
-                      ev.type !== null
-                    ) {
-                      return (
-                        <React.Fragment>
-                          Evolves to {ev.evoName.name} upon Level up with{" "}
-                          {ev.min_happiness} Happiness and knowing a{" "}
-                          {ev.type.name} move.
-                          <br />
-                        </React.Fragment>
-                      );
-                    } else if (
-                      ev.trigger.name === "level-up" &&
-                      ev.min_happiness !== null &&
-                      ev.time_of_day !== null
-                    ) {
-                      return (
-                        <React.Fragment>
-                          Evolves to {ev.evoName.name} upon Level up with{" "}
-                          {ev.min_happiness} Happiness during the{" "}
-                          {ev.time_of_day}
-                          . <br />
+                          Evolves to{" "}
+                          <strong className="capitalize">
+                            {ev.evoName.name}
+                          </strong>{" "}
+                          after landing 3 Critical hits in one battle.
                         </React.Fragment>
                       );
                     } else {
@@ -377,11 +447,38 @@ export default function PokemonDetails(pokemon) {
               </React.Fragment>
             ))}
           </div>
-          {/* <div className="">
-            <h1 className="">
-              Moves Learned - Tabbed Table
-            </h1>
-          </div> */}
+          <div className="shadow-lg rounded-lg w-full overflow-y-auto">
+            <h1 className="text-xl font-extrabold">Moves</h1>
+            <table className="table-auto w-full border-collapse">
+              <thead>
+                <tr className="bg-jet text-magnolia">
+                  <th className="w-1/5 font-bold">Level</th>
+                  <th className="w-1/5 font-bold">Move Name</th>
+                  <th className="w-1/5 font-bold">Power</th>
+                  <th className="w-1/5 font-bold">Accuracy</th>
+                  <th className="w-1/5 font-bold">Learn Method</th>
+                </tr>
+              </thead>
+              <tbody>
+                {basicDetails.moves.map((el, idx) =>
+                  el.gameVersion.name.includes(version) ? (
+                    <tr
+                      key={idx}
+                      className="hover:bg-illumination-emerald hover:text-magnolia "
+                    >
+                      <td>{el.level}</td>
+                      <td className="capitalize">{el.move.name}</td>
+                      <td>{el.move.power}</td>
+                      <td>{el.move.accuracy}</td>
+                      <td className="capitalize">{el.learnMethod.name}</td>
+                    </tr>
+                  ) : (
+                    <></>
+                  )
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </React.Fragment>
