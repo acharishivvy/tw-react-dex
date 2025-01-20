@@ -1,6 +1,9 @@
 import React, { useState, useLayoutEffect } from "react";
 import axios from "axios";
-import { CalculateStatPercentage, ConvertUnits } from "../functions/utility";
+import {
+  CalculateStatPercentage,
+  ConvertUnits,
+} from "../functions/utility.jsx";
 import ProgressBar from "./progressBar";
 
 export default function PokemonDetails(pokemon) {
