@@ -1,4 +1,4 @@
-import { useState } from "react";
+import Pokedex from "./components/Pokedex";
 import "./App.css";
 import PokemonList from "./components/PokemonList";
 import React from "react";
@@ -28,6 +28,7 @@ function App() {
               Simulation
             </button>
           </div>
+          <Pokedex />
         </section>
       </header>
       <div>
