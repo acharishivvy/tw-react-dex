@@ -1,7 +1,6 @@
 import Pokedex from "./components/Pokedex";
 import "./App.css";
-import PokemonList from "./components/PokemonList";
-import React from "react";
+//import PokemonList from "./components/PokemonList";
 
 function App() {
   return (
@@ -28,12 +27,15 @@ function App() {
               Simulation
             </button>
           </div>
-          <Pokedex />
         </section>
       </header>
       <div>
-        <PokemonList />
+        <Pokedex />
       </div>
+
+      {/* <div>
+        <PokemonList />
+      </div> */}
     </>
   );
 }

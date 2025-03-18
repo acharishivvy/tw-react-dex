@@ -1,5 +1,3 @@
-import React from "react";
-
 const ProgressBar = ({ bgcolor, progress, height }) => {
   const Parentdiv = {
     height: height,
