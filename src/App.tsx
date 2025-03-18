@@ -1,6 +1,6 @@
-import Pokedex from "./components/Pokedex";
+//import Pokedex from "./components/Pokedex";
 import "./App.css";
-//import PokemonList from "./components/PokemonList";
+import PokemonList from "./components/PokemonList";
 
 function App() {
   return (
@@ -29,13 +29,13 @@ function App() {
           </div>
         </section>
       </header>
-      <div>
-        <Pokedex />
-      </div>
-
       {/* <div>
-        <PokemonList />
+        <Pokedex />
       </div> */}
+
+      <div>
+        <PokemonList />
+      </div>
     </>
   );
 }

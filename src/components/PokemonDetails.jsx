@@ -4,7 +4,7 @@ import {
   CalculateStatPercentage,
   ConvertUnits,
 } from "../functions/utility.jsx";
-import ProgressBar from "./progressBar.js";
+import ProgressBar from "./progressBar";
 
 export default function PokemonDetails(pokemon) {
   const [basicDetails, setBasicDetails] = useState([]);
