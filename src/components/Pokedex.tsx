@@ -70,7 +70,7 @@ export default function Pokedex() {
         </Button>
       ))}
       <hr />
-      {/* {Pokemon(pokemon, api)} */}
+      {Pokemon(pokemon, api)}
       <p>{pokedex.count}</p>
     </div>
   );

@@ -1,14 +1,11 @@
 import React, { useState, useLayoutEffect } from "react";
 import axios from "axios";
-import {
-  CalculateStatPercentage,
-  ConvertUnits,
-} from "../functions/utility.jsx";
-import ProgressBar from "./progressBar";
+import { CalculateStatPercentage, ConvertUnits } from "../functions/utility.js";
+import ProgressBar from "./progressBar.js";
 
-export default function PokemonDetails(pokemon) {
-  const [basicDetails, setBasicDetails] = useState([]);
-  const [gameVersions, setGameVersions] = useState([]);
+export default function PokemonDetails(pokemon: any) {
+  const [basicDetails, setBasicDetails] = useState<any>([]);
+  const [gameVersions, setGameVersions] = useState<any>([]);
   let [version, setVersion] = useState("red");
 
   //GraphQL Query
@@ -160,7 +157,7 @@ export default function PokemonDetails(pokemon) {
   };
 
   // handle onChange event of the dropdown
-  const handleChange = (e) => {
+  const handleChange = (e: any) => {
     setVersion(e.target.value);
   };
 
@@ -201,14 +198,13 @@ export default function PokemonDetails(pokemon) {
             onChange={handleChange}
             className="bg-magnolia border border-gray-300 rounded-full text-center hover:border-gray-400 focus:outline-none appearance-none capitalize"
           >
-            {gameVersions.map((version, id) => (
+            {gameVersions.map((version: any, id: any) => (
               <option key={id} value={version.name} className="capitalize">
                 {version.name}
               </option>
             ))}
           </select>
         </div>
-        {console.log(basicDetails)}
         <div className="flex flex-row flex-wrap justify-items-center">
           <div className="shadow-lg rounded-lg w-1/3 flex-grow">
             <p className="capitalize">
@@ -220,7 +216,7 @@ export default function PokemonDetails(pokemon) {
             <p>Weight: {ConvertUnits(basicDetails.weight)}kg</p>
           </div>
           <div className="shadow-lg rounded-lg w-1/3 flex-grow">
-            {basicDetails.types.map((el) => (
+            {basicDetails.types.map((el: any) => (
               <React.Fragment key={el.type.name}>
                 {/* Doing it this way is not recommended or supported */}
                 <button
@@ -230,7 +226,7 @@ export default function PokemonDetails(pokemon) {
                 </button>
               </React.Fragment>
             ))}
-            {basicDetails.abilities.map((el) => (
+            {basicDetails.abilities.map((el: any) => (
               <React.Fragment key={el.ability.name}>
                 <p className="capitalize">
                   {el.ability.name} {el.is_hidden === true && <sub>Hidden</sub>}
@@ -242,7 +238,7 @@ export default function PokemonDetails(pokemon) {
             <span className="capitalize">
               {" "}
               Egg Groups:{" "}
-              {basicDetails.species.eggGroup.map((el, idx) => (
+              {basicDetails.species.eggGroup.map((el: any) => (
                 <React.Fragment>
                   <em className="capitalize">{el.group.name} </em>
                 </React.Fragment>
@@ -250,7 +246,7 @@ export default function PokemonDetails(pokemon) {
             </span>
           </div>
           <div className="shadow-lg rounded-lg w-full">
-            {basicDetails.species.flavorTexts.map((el, idx) => (
+            {basicDetails.species.flavorTexts.map((el: any, idx: any) => (
               <React.Fragment key={idx}>
                 {el.gameVersion.name === version &&
                 el.language.name === "en" ? (
@@ -264,20 +260,19 @@ export default function PokemonDetails(pokemon) {
           <div className="shadow-lg rounded-lg w-1/2">
             <h1 className="">Base Stats</h1>
             {/* Probably need to run this outside of the render then display here saves duped code */}
-            {basicDetails.stats.map((el) => (
+            {basicDetails.stats.map((el: any) => (
               <React.Fragment key={el.stat.name}>
                 <span className="capitalize">
                   {el.stat.name} : {el.base_stat}
                 </span>
                 <ProgressBar
-                  className="p-4"
                   bgcolor="Lime"
                   progress={CalculateStatPercentage(el.base_stat)}
                   height={12}
                 />
               </React.Fragment>
             ))}
-            {basicDetails.stats.map((el) => (
+            {basicDetails.stats.map((el: any) => (
               <React.Fragment key={el.stat.name}>
                 <p className="capitalize">
                   {el.effort !== 0 &&
@@ -291,10 +286,10 @@ export default function PokemonDetails(pokemon) {
           </div>
           <div className="shadow-lg rounded-lg w-1/2 overflow-y-auto">
             <h1 className=" text-xl font-bold">Evolutions</h1>
-            {basicDetails.species.evolutionChain.evoSpecies.map((el, idx) => (
+            {basicDetails.species.evolutionChain.evoSpecies.map((el: any) => (
               <React.Fragment>
                 {el.evolution.length !== 0 &&
-                  el.evolution.map((ev) => {
+                  el.evolution.map((ev: any) => {
                     if (ev.trigger.name === "level-up") {
                       if (ev.min_happiness !== null) {
                         if (ev.type !== null) {
@@ -463,7 +458,7 @@ export default function PokemonDetails(pokemon) {
                 </tr>
               </thead>
               <tbody>
-                {basicDetails.moves.map((el, idx) =>
+                {basicDetails.moves.map((el: any, idx: any) =>
                   el.gameVersion.name.includes(version) ? (
                     <tr
                       key={idx}
