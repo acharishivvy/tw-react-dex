@@ -1,4 +1,4 @@
-//import Pokedex from "./components/Pokedex";
+import Pokedex from "./components/Pokedex";
 import "./App.css";
 import PokemonList from "./components/PokemonList";
 

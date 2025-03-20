@@ -1,21 +1,19 @@
 import { useEffect, useState } from "react";
 import { MainClient } from "pokenode-ts";
 import { Button } from "./ui/button";
+import Pokemon from "./Pokemon";
 
 export default function Pokedex() {
   const [pokedex, setPokedex] = useState<any>(null);
   const [pokemon, setPokemon] = useState<any>(null);
+  const [sprite, setSprite] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
 
   const api = new MainClient({ logs: true });
 
-  // Function to fetch Pokémon data by ID
   const getPokemonByName = async (name: string) => {
     try {
-      // Fetch Pokémon data by ID
       const fetchedPokemon = await api.pokemon.getPokemonByName(name);
-
-      // Set the fetched Pokémon state
       setPokemon(fetchedPokemon);
     } catch (err) {
       setError("Error fetching Pokémon data");
@@ -54,7 +52,7 @@ export default function Pokedex() {
 
   const handlePokemonClick = (name: string) => {
     setPokemon(null); // Clear previous Pokémon data to show loading state
-    getPokemonByName(name);
+    getPokemonByName(name, api);
   };
 
   //Runs the pokedex fetching first, then when the
@@ -67,13 +65,14 @@ export default function Pokedex() {
         </Button>
       ))}
       <hr />
-      <h1>{pokemon.name}</h1>
+      {Pokemon(pokemon)}
+      {/* <h1>{pokemon.name}</h1>
       <p>ID: {pokemon.id}</p>
       <p>
         Types: {pokemon.types.map((type: any) => type.type.name).join(", ")}
       </p>
       <p>Height: {pokemon.height} decimeters</p>
-      <p>Weight: {pokemon.weight} hectograms</p>
+      <p>Weight: {pokemon.weight} hectograms</p> */}
       <p>{pokedex.count}</p>
     </div>
   );
