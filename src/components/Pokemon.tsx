@@ -4,7 +4,7 @@ import { useState } from "react";
 export default function Pokemon(pokemon: any, api: MainClient) {
   const [species, SetSpecies] = useState<any>(null);
 
-  //SetSpecies(api.pokemon.getPokemonSpeciesByName(pokemon.name));
+  SetSpecies(api.pokemon.getPokemonSpeciesByName(pokemon.name));
 
   console.log(species.name);
   return (

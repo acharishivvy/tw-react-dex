@@ -6,7 +6,6 @@ import Pokemon from "./Pokemon";
 export default function Pokedex() {
   const [pokedex, setPokedex] = useState<any>(null);
   const [pokemon, setPokemon] = useState<any>(null);
-  const [sprite, setSprite] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
 
   const api = new MainClient({ logs: true });
@@ -42,6 +41,11 @@ export default function Pokedex() {
     }
   }, [pokedex]);
 
+  const handlePokemonClick = (name: string) => {
+    setPokemon(null); // Clear previous Pokémon data to show loading state
+    getPokemonByName(name);
+  };
+
   if (error) {
     return <div>{error}</div>;
   }
@@ -50,29 +54,23 @@ export default function Pokedex() {
     return <div>Loading...</div>;
   }
 
-  const handlePokemonClick = (name: string) => {
-    setPokemon(null); // Clear previous Pokémon data to show loading state
-    getPokemonByName(name, api);
-  };
-
-  //Runs the pokedex fetching first, then when the
-  //pokemon is clicked it fetches that particular pokemon to display some information about it.
   return (
     <div>
-      {pokedex.results.map((result: any) => (
-        <Button key={result.id} onClick={() => handlePokemonClick(result.name)}>
-          {result.name}
+      {pokedex.results.map((result: any, idx: number) => (
+        <Button key={idx} onClick={() => handlePokemonClick(result.name)}>
+          <img
+            src={
+              `https://img.pokemondb.net/sprites/home/normal/` +
+              result.name +
+              `.png`
+            }
+            width={90}
+            height={80}
+          />
         </Button>
       ))}
       <hr />
-      {Pokemon(pokemon)}
-      {/* <h1>{pokemon.name}</h1>
-      <p>ID: {pokemon.id}</p>
-      <p>
-        Types: {pokemon.types.map((type: any) => type.type.name).join(", ")}
-      </p>
-      <p>Height: {pokemon.height} decimeters</p>
-      <p>Weight: {pokemon.weight} hectograms</p> */}
+      {/* {Pokemon(pokemon, api)} */}
       <p>{pokedex.count}</p>
     </div>
   );
