@@ -1,22 +1,59 @@
 import { MainClient } from "pokenode-ts";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function Pokemon(pokemon: any, api: MainClient) {
-  const [species, SetSpecies] = useState<any>(null);
+interface PokemonProps {
+  name: string;
+  api: MainClient;
+}
 
-  SetSpecies(api.pokemon.getPokemonSpeciesByName(pokemon.name));
+const Pokemon = ({ name, api }: PokemonProps) => {
+  const [species, setSpecies] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  console.log(species.name);
+  useEffect(() => {
+    const fetchSpecies = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const speciesData = await api.pokemon.getPokemonSpeciesByName(name);
+        setSpecies(speciesData);
+      } catch (e: any) {
+        setError(e.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSpecies();
+  }, [name, api]);
+
+  if (loading) {
+    return <p>Loading species information...</p>;
+  }
+
+  if (error) {
+    return <p>Error fetching species: {error}</p>;
+  }
+
+  if (!species) {
+    return <p>No species data available.</p>;
+  }
+
   return (
     <div>
-      <h1>PokemonTSX</h1>
-      <h1>{pokemon.name}</h1>
-      <p>ID: {pokemon.id}</p>
-      <p>
-        Types: {pokemon.types.map((type: any) => type.type.name).join(", ")}
-      </p>
-      <p>Height: {pokemon.height} decimeters</p>
-      <p>Weight: {pokemon.weight} hectograms</p>
+      <h2>{name} Species Details</h2>
+      <div>
+        <p>
+          <strong>Name:</strong> {species.name}
+        </p>
+        {species.habitat && (
+          <p>
+            <strong>Habitat:</strong> {species.habitat.name}
+          </p>
+        )}
+      </div>
     </div>
   );
-}
+};
+export default Pokemon;
