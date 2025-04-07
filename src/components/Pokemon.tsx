@@ -1,5 +1,15 @@
 import { MainClient } from "pokenode-ts";
 import { useEffect, useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "./ui/dialog";
+import { Button } from "./ui/button";
 
 interface PokemonProps {
   name: string;
@@ -61,54 +71,72 @@ const Pokemon = ({ name, api }: PokemonProps) => {
 
   return (
     <div>
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button variant="outline">{name} Details</Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>{name}</DialogTitle>
+            {/* Dropdown to select the version */}
+            <div>
+              <h3>Select Version</h3>
+              <select
+                value={selectedVersion}
+                onChange={(e) => setSelectedVersion(e.target.value)}
+              >
+                {englishFlavorTextEntries.map((entry: any, index: number) => (
+                  <option key={index} value={entry.version.name}>
+                    {entry.version.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <DialogDescription>
+              {/* Display selected flavor text */}
+              {selectedFlavorTextEntry && (
+                <div>
+                  <h3>Selected Flavor Text Entry</h3>
+                  <p>
+                    <strong>{selectedFlavorTextEntry.version.name}:</strong>{" "}
+                    {selectedFlavorTextEntry.flavor_text.replace(/\n/g, " ")}
+                  </p>
+                </div>
+              )}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <p>
+                <strong>Name:</strong> {species.name}
+              </p>
+              {species.habitat && (
+                <p>
+                  <strong>Habitat:</strong> {species.habitat.name}
+                </p>
+              )}
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <h3>Other Details</h3>
+              <p>
+                <strong>ID:</strong> {species.id}
+              </p>
+              <p>
+                <strong>Order:</strong> {species.order}
+              </p>
+              <p>
+                <strong>Gender Rate:</strong> {species.gender_rate}
+              </p>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button type="submit">Save changes</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
       <h2>{name} Species Details</h2>
       <div>
-        <p>
-          <strong>Name:</strong> {species.name}
-        </p>
-        {species.habitat && (
-          <p>
-            <strong>Habitat:</strong> {species.habitat.name}
-          </p>
-        )}
-
-        {/* Dropdown to select the version */}
-        <div>
-          <h3>Select Version</h3>
-          <select
-            value={selectedVersion}
-            onChange={(e) => setSelectedVersion(e.target.value)}
-          >
-            {englishFlavorTextEntries.map((entry: any, index: number) => (
-              <option key={index} value={entry.version.name}>
-                {entry.version.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* Display selected flavor text */}
-        {selectedFlavorTextEntry && (
-          <div>
-            <h3>Selected Flavor Text Entry</h3>
-            <p>
-              <strong>{selectedFlavorTextEntry.version.name}:</strong>{" "}
-              {selectedFlavorTextEntry.flavor_text.replace(/\n/g, " ")}
-            </p>
-          </div>
-        )}
-
         {/* Display other fields */}
-        <h3>Other Details</h3>
-        <p>
-          <strong>ID:</strong> {species.id}
-        </p>
-        <p>
-          <strong>Order:</strong> {species.order}
-        </p>
-        <p>
-          <strong>Gender Rate:</strong> {species.gender_rate}
-        </p>
 
         {/* Add more fields as needed */}
 
