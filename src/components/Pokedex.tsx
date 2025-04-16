@@ -1,3 +1,5 @@
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { MainClient } from "pokenode-ts";
 import { Button } from "./ui/button";
@@ -56,7 +58,7 @@ export default function Pokedex() {
   }
 
   if (!pokedex) {
-    return <p>Couldn't Catch them All!</p>;
+    return <p>Couldn&apos;t Catch them All!</p>;
   }
 
   const handlePokemonClick = (name: string) => {
